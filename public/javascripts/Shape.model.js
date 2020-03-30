@@ -40,10 +40,23 @@ class Shape
             let containerXPos = this.containerBoundingRect.left;
             let containerYPos = this.containerBoundingRect.top;
             
-            this.SVGElement.attr({
-                x : event.clientX - (this.width / 2) - containerXPos,
-                y : event.clientY - (this.height / 2) - containerYPos
-            });
+            let newPosX = event.clientX - (this.width / 2) - containerXPos;
+            let newPosY = event.clientY - (this.height / 2) - containerYPos;
+
+            (newPosX < 1 ? newPosX = 0 : newPosX = newPosX);
+            (newPosY < 1 ? newPosY = 0 : newPosY = newPosY);
+
+            if(newPosX >= 0 && newPosX <= 1000 - this.width)
+            {
+                this.SVGElement.x(newPosX);
+            }
+            
+            if(newPosY >= 0 && newPosY <= 800 - this.height)
+            {
+                this.SVGElement.y(newPosY);
+            }
+            
+            
         }
     }
 

@@ -49,6 +49,7 @@ function UnselectAllElement()
     for(let i = 0; i < listOfShape.length; i++)
     {
         listOfShape[i].Unselect();
+        listOfShape[i].OnMouseUpCallback();
     }
 }
 

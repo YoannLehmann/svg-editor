@@ -3,17 +3,26 @@ extends layout
 block content
   h1 #{title}
   p #{description}
+  label Shape menu
+  br
   button(id='btn-new-square') Add new square !
-  button(id='btn-export') export !
-  button(id='btn-test') test button !
-  label Grid size
-  input(id='input-grid-cell-size' value='50' type='number' min='1' max='100')
-  label Canvas size
-  label Canvas width
+  button(id='btn-new-text') Add new text !
+  br
+  label Canvas
+  br
+  label Width : 
   input(id='input-canvas-width' value='500' type='number' min='100' max='1000')
-  label Canvas height
+  label Height : 
   input(id='input-canvas-height' value='300' type='number' min='100' max='800')
-  button(id='btn-add-grid') add a grid !
-  button(id='btn-remove-grid') remove the grid !
+  br
+  label Grid
+  br
+  button(id='btn-add-grid') Add a grid !
+  button(id='btn-remove-grid') Remove the grid !
+  input(id='input-grid-cell-size' value='50' type='number' min='10' max='1000')
+  br
+  label Not working yet
+  br
   input(type='file' id='input-svg-file')
+  button(id='btn-export') export !
   div(id="canvas-container")

@@ -2,6 +2,7 @@ let btnNewSquare = document.getElementById('btn-new-square');
 let btnExport = document.getElementById('btn-export');
 let btnAddGrid = document.getElementById('btn-add-grid');
 let btnRemoveGrid = document.getElementById('btn-remove-grid');
+let btnNewText = document.getElementById('btn-new-text');
 let inputSvgFile = document.getElementById('input-svg-file');
 let inputGridCellSize = document.getElementById('input-grid-cell-size')
 let inputCanvasWidth = document.getElementById('input-canvas-width');
@@ -13,6 +14,8 @@ mainCanvas.attr('id', 'main-canvas');
 let canvasBackground = mainCanvas.rect(inputCanvasWidth.value,inputCanvasHeight.value).attr({fill:'#ddd'});
 let listOfShape = [];
 let listOfGridLine = [];
+
+
 
 btnRemoveGrid.addEventListener('click', RemoveGrid);
 
@@ -43,7 +46,7 @@ function RefreshGrid()
     RemoveGrid();
     
     let cellSize = parseInt(inputGridCellSize.value);
-    let horizontalLineCount = Math.round(inputCanvasHeight.value / (cellSize - 1));
+    let horizontalLineCount = Math.round(inputCanvasHeight.value / (cellSize - 5));
     for(let i = 1; i < horizontalLineCount; i++)
     {
         let horizontalLine = mainCanvas.line(0, i * cellSize, inputCanvasWidth.value, i * cellSize);
@@ -51,7 +54,7 @@ function RefreshGrid()
         listOfGridLine.push(horizontalLine);
     }
 
-    let verticalLineCount = Math.round(inputCanvasWidth.value / (cellSize - 1))
+    let verticalLineCount = Math.round(inputCanvasWidth.value / (cellSize - 5))
     for(let i = 1; i < verticalLineCount; i++)
     {
         let verticalLine = mainCanvas.line(i * cellSize, 0, i * cellSize, inputCanvasHeight.value);
@@ -128,10 +131,16 @@ btnNewSquare.addEventListener('click', BtnAddNewSquareCallback);
 
 function BtnAddNewSquareCallback()
 {
-    console.log("Add new square !");
-
     let square = new Square(mainCanvas, canvasContainer.getBoundingClientRect(), 150, 300, 300, "red");
     bindShapeListener(square);
     listOfShape.push(square);
-    console.log(listOfShape);
+}
+
+btnNewText.addEventListener('click', BtnAddNewTextCallback);
+
+function BtnAddNewTextCallback()
+{
+    let text = new TextSVG(mainCanvas, canvasContainer.getBoundingClientRect(), 100, 150, 150, 'yellow');
+    bindShapeListener(text);
+    listOfShape.push(text);
 }

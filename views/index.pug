@@ -3,4 +3,9 @@ extends layout
 block content
   h1 #{title}
   p #{description}
-  button(id='new-shape') click me !
+  button(id='btn-new-shape') new shape !
+  button(id='btn-export') export !
+  button(id='btn-test') test button !
+  p #{canvasWidth}
+  input(type='file' id='input-svg-file')
+  div(id="canvas-container")

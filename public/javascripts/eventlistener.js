@@ -1,12 +1,66 @@
 let btnNewSquare = document.getElementById('btn-new-square');
 let btnExport = document.getElementById('btn-export');
+let btnAddGrid = document.getElementById('btn-add-grid');
+let btnRemoveGrid = document.getElementById('btn-remove-grid');
 let inputSvgFile = document.getElementById('input-svg-file');
+let inputGridCellSize = document.getElementById('input-grid-cell-size')
+let inputCanvasWidth = document.getElementById('input-canvas-width');
+let inputCanvasHeight = document.getElementById('input-canvas-height');
 let mousePressed = false;
 let canvasContainer = document.getElementById('canvas-container');
-let mainCanvas = SVG().addTo('#canvas-container').size(1000, 800);
+let mainCanvas = SVG().addTo('#canvas-container').size(inputCanvasWidth.value, inputCanvasHeight.value);
 mainCanvas.attr('id', 'main-canvas');
-let canvasBackground = mainCanvas.rect(1000,800).attr({fill:'#eee'});
+let canvasBackground = mainCanvas.rect(inputCanvasWidth.value,inputCanvasHeight.value).attr({fill:'#ddd'});
 let listOfShape = [];
+let listOfGridLine = [];
+
+btnRemoveGrid.addEventListener('click', RemoveGrid);
+
+inputCanvasWidth.addEventListener('change', function(event){
+    mainCanvas.attr({width: this.value});
+    canvasBackground.attr({width: this.value});
+    RefreshGrid();
+});
+
+inputCanvasHeight.addEventListener('change', function(event){
+    mainCanvas.attr({height: this.value});
+    canvasBackground.attr({height: this.value});
+    RefreshGrid();
+});
+
+function RemoveGrid()
+{
+    for(let i = 0; i < listOfGridLine.length; i++)
+    {
+        listOfGridLine[i].remove();
+    }
+}
+
+inputGridCellSize.addEventListener('change', RefreshGrid);
+
+function RefreshGrid()
+{
+    RemoveGrid();
+    
+    let cellSize = parseInt(inputGridCellSize.value);
+    let horizontalLineCount = Math.round(inputCanvasHeight.value / (cellSize - 1));
+    for(let i = 1; i < horizontalLineCount; i++)
+    {
+        let horizontalLine = mainCanvas.line(0, i * cellSize, inputCanvasWidth.value, i * cellSize);
+        horizontalLine.stroke({ color: 'black', width: 1, linecap: 'round' })
+        listOfGridLine.push(horizontalLine);
+    }
+
+    let verticalLineCount = Math.round(inputCanvasWidth.value / (cellSize - 1))
+    for(let i = 1; i < verticalLineCount; i++)
+    {
+        let verticalLine = mainCanvas.line(i * cellSize, 0, i * cellSize, inputCanvasHeight.value);
+        verticalLine.stroke({ color: 'black', width: 1, linecap: 'round' });
+        listOfGridLine.push(verticalLine);
+    }
+}
+
+btnAddGrid.addEventListener('click', RefreshGrid);
 
 canvasBackground.on(['click'], function(event){
     console.log("Canvas clicked.");

@@ -26,6 +26,7 @@ let inputImportSVGFile = document.getElementById('input-import-svg-file');
 let btnExportCanvas = document.getElementById('btn-export');
 // **** VARIABLES ****
 let mousePressed = false;
+let selectedShape = null;
 let listOfShape = [];
 let listOfGridLine = [];
 
@@ -83,12 +84,18 @@ function InputSVGFileChangeCallback(event)
 
 function InputSquareSideChangeCallback(event)
 {
-    // @TODO Make the function.
+    if(selectedShape !== null && selectedShape.type === 'square')
+    {
+        selectedShape.changeSideLength(inputSquareSide.value);
+    }
 }
 
 function InputSquareColorChangeCallback(event)
 {
-    // @TODO Make the function.
+    if(selectedShape !== null && selectedShape.type === 'square')
+    {
+        selectedShape.changeColor(inputSquareColor.value);
+    }
 }
 
 function InputTextFontSizeChangeCallback(event)
@@ -136,10 +143,11 @@ function CanvasBackgroundClickCallback(event)
     UnselectAllElement();
 }
 
-function ShapeClickCallback(event)
+function ShapeClickCallback(event, shape)
 {
-    console.log("Shape click callback");
-    console.log(this);
+    hideMenus();
+    showMenu(shape.type);
+    selectedShape = shape;
 }
 
 // Functions
@@ -229,13 +237,16 @@ function UnselectAllElement()
         listOfShape[i].Unselect();
         listOfShape[i].OnMouseUpCallback();
     }
+
+    selectedShape = null;
 }
 
 function bindShapeListener(shape)
 {
     shape.SVGElement.on(['click'], function(event){
         shape.OnClickCallback(event);
-    }, ShapeClickCallback);
+        ShapeClickCallback(event, shape);
+    });
     shape.SVGElement.on(['mouseup'], function(event){
         shape.OnMouseUpCallback(event);
     });
@@ -260,9 +271,4 @@ function addNewText(textFontSize, textFontFamily)
     let text = new TextSVG(mainCanvas, canvasContainer.getBoundingClientRect(), textFontSize, 50, 50, 'yellow');
     bindShapeListener(text);
     listOfShape.push(text);
-}
-
-function BtnAddNewTextCallback()
-{
-    
 }

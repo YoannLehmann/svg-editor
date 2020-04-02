@@ -138,7 +138,17 @@ function BtnRefreshGridClickCallback(event)
 
 function BtnFillCanvasClickCallback(event)
 {
-    // @TODO Make the function.
+    switch(selectSVGElements.value)
+    {
+        case 'square' : 
+            fillCanvasWithSquares();
+            break;
+        case 'text' : 
+            fillCanvasWithText();
+            break;
+        default: 
+            break;
+    }
 }
 
 function BtnDeleteElementClickCallback(event)
@@ -273,9 +283,9 @@ function bindShapeListener(shape)
     });
 }
 
-function addNewSquare(squareSideLength, squareColor)
+function addNewSquare(squareSideLength, squareColor, squarePosX = 20, squarePosY = 20)
 {
-    let square = new Square(mainCanvas, canvasContainer.getBoundingClientRect(), squareSideLength, 20, 20, squareColor);
+    let square = new Square(mainCanvas, canvasContainer.getBoundingClientRect(), squareSideLength, squarePosX, squarePosY, squareColor);
     bindShapeListener(square);
     listOfShape.push(square);
 }
@@ -285,4 +295,33 @@ function addNewText(textFontSize, textFontFamily)
     let text = new TextSVG(mainCanvas, canvasContainer.getBoundingClientRect(), textFontSize, 50, 50, 'yellow');
     bindShapeListener(text);
     listOfShape.push(text);
+}
+
+function fillCanvasWithSquares()
+{
+    let squareSideLength = parseInt(inputSquareSide.value);
+    let squareColor = inputSquareColor.value;
+    const elementSpacing = 3;
+
+    let horizontalLineCount = Math.floor(inputCanvasWidth.value / (squareSideLength));
+    // Tester si la les carrés + les espaces sont plus grand que la taille totale
+    while((horizontalLineCount * elementSpacing + horizontalLineCount * squareSideLength) > inputCanvasWidth.value)
+    {
+        horizontalLineCount--;
+    }
+    
+    for(let i = 0; i < horizontalLineCount; i++)
+    {
+        let verticalLineCount = Math.floor(inputCanvasHeight.value / (squareSideLength))
+        while((verticalLineCount * elementSpacing + verticalLineCount * squareSideLength) > inputCanvasHeight.value)
+        {
+            verticalLineCount--;
+        }
+        for(let j = 0; j < verticalLineCount; j++)
+        {
+            addNewSquare(squareSideLength, squareColor, i * (squareSideLength + elementSpacing), j * (squareSideLength + elementSpacing));
+        }
+    }
+
+    
 }

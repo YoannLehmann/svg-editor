@@ -28,6 +28,7 @@ let inputImportSVGFile = document.getElementById('input-import-svg-file');
 let btnExportCanvas = document.getElementById('btn-export');
 // **** VARIABLES ****
 let mousePressed = false;
+let gridActive = false;
 let selectedShape = null;
 let listOfShape = [];
 let listOfGridLine = [];
@@ -63,14 +64,19 @@ function InputCanvasWidthChangeCallback(event)
 {
     mainCanvas.attr({width: this.value});
     canvasBackground.attr({width: this.value});
-    refreshGrid();
+    (gridActive ? refreshGrid() : null)
 }
 
 function InputCanvasHeightChangeCallback(event)
 {
     mainCanvas.attr({height: this.value});
     canvasBackground.attr({height: this.value});
-    refreshGrid();
+    (gridActive ? refreshGrid() : null)
+}
+
+function InputGridCellSizeChangeCallback(event)
+{
+    (gridActive ? refreshGrid() : null)
 }
 
 function InputSVGFileChangeCallback(event)
@@ -205,7 +211,7 @@ function bindEventListener()
     inputSquareColor.addEventListener('change', InputSquareColorChangeCallback);
     inputTextFontSize.addEventListener('change', InputTextFontSizeChangeCallback);
     inputTextContent.addEventListener('change', InputTextContentChangeCallback);
-    inputGridCellSize.addEventListener('change', refreshGrid);
+    inputGridCellSize.addEventListener('change', InputGridCellSizeChangeCallback);
     inputCanvasWidth.addEventListener('change', InputCanvasWidthChangeCallback);
     inputCanvasHeight.addEventListener('change', InputCanvasHeightChangeCallback);
     inputImportSVGFile.addEventListener('change', InputSVGFileChangeCallback);
@@ -246,6 +252,11 @@ function hideMenus()
 
 function removeGrid()
 {
+    gridActive = false;
+    inputGridCellSize.style.display = 'none';
+    btnAddGrid.style.display = 'block';
+    btnRemoveGrid.style.display = 'none';
+
     for(let i = 0; i < listOfGridLine.length; i++)
     {
         listOfGridLine[i].remove();
@@ -255,6 +266,10 @@ function removeGrid()
 function refreshGrid()
 {
     removeGrid();
+    gridActive = true;
+    btnAddGrid.style.display = 'none';
+    btnRemoveGrid.style.display = 'block';
+    inputGridCellSize.style.display = 'block';
     
     let cellSize = parseInt(inputGridCellSize.value);
     let horizontalLineCount = Math.round(inputCanvasHeight.value / (cellSize - 5));

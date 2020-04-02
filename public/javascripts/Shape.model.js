@@ -56,22 +56,20 @@ class Shape
 
             let dx = newMousePosition[0] - this.oldMousePosition[0];
             let dy = newMousePosition[1] - this.oldMousePosition[1];
-            let newPosX = this.SVGElement.x() + dx;//event.clientX  - containerXPos;
-            let newPosY = this.SVGElement.y() + dy;//event.clientY  - containerYPos;
+            let newPosX = this.SVGElement.x() + dx;
+            let newPosY = this.SVGElement.y() + dy;
             this.oldMousePosition = newMousePosition;
         
-
-            //if(newPosX >= 0 && newPosX <= 1000 - this.width)
-            //{
+            // @TODO Modifier la taille de la zone pour que ce soit automatique.
+            if(newPosX >= 0 && newPosX <= 500 - this.width)
+            {
                 this.SVGElement.x(newPosX);
-                //this.SVGElement.move(this.SVGElement.x, 0);
-            //}
+            }
             
-            //if(newPosY >= 0 && newPosY <= 800 - this.height)
-            //{
+            if(newPosY >= 0 && newPosY <= 300 - this.height)
+            {
                 this.SVGElement.y(newPosY);
-                //this.SVGElement.move(0, dy);
-            //}
+            }
             
             
         }

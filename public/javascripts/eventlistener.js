@@ -1,7 +1,8 @@
 // **** SVG MENU ****
-let btnFillCanvas = document.getElementById('fill-canvas');
-let btnDeleteElement = document.getElementById('delete-element');
-let btnAddElement = document.getElementById('add-element');
+let btnFillCanvas = document.getElementById('btn-fill-canvas');
+let btnDeleteElement = document.getElementById('btn-delete-element');
+let btnAddElement = document.getElementById('btn-add-element');
+let btnDeleteAllElements = document.getElementById('btn-delete-all-elements')
 let selectSVGElements = document.getElementById('select-svg-elements'); 
 // ------ SQUARE MENU ------
 let inputSquareSide = document.getElementById('input-square-side');
@@ -160,6 +161,15 @@ function BtnDeleteElementClickCallback(event)
     }
 }
 
+function BtnDeleteAllElementsCallback(event)
+{
+    UnselectAllElement();
+    for(let i = 0; i < listOfShape.length; i++)
+    {
+        listOfShape[i].SVGElement.remove();
+    }
+}
+
 function CanvasBackgroundClickCallback(event)
 {
     UnselectAllElement();
@@ -181,6 +191,7 @@ function bindEventListener()
     btnFillCanvas.addEventListener('click', BtnFillCanvasClickCallback);
     btnDeleteElement.addEventListener('click', BtnDeleteElementClickCallback);
     btnAddElement.addEventListener('click', BtnAddElementClickCallback);
+    btnDeleteAllElements.addEventListener('click', BtnDeleteAllElementsCallback);
     inputSquareSide.addEventListener('change', InputSquareSideChangeCallback);
     inputSquareColor.addEventListener('change', InputSquareColorChangeCallback);
     inputTextFontSize.addEventListener('change', InputTextFontSizeChangeCallback);

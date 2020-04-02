@@ -10,6 +10,7 @@ let inputSquareColor = document.getElementById('input-square-color');
 // ------ TEXT MENU --------
 let selectTextFontFamily = document.getElementById('select-text-font-family');
 let inputTextFontSize = document.getElementById('input-text-font-size');
+let inputTextContent = document.getElementById('input-text-content');
 // **** CANVAS MENU ****
 let inputGridCellSize = document.getElementById('input-grid-cell-size')
 let inputCanvasWidth = document.getElementById('input-canvas-width');
@@ -112,6 +113,14 @@ function InputTextFontSizeChangeCallback(event)
     }
 }
 
+function InputTextContentChangeCallback(event)
+{
+    if(selectedShape !== null && selectedShape.type === 'text')
+    {
+        selectedShape.changeTextContent(inputTextContent.value);
+    }
+}
+
 function BtnAddElementClickCallback()
 {
     switch(selectSVGElements.value)
@@ -120,7 +129,7 @@ function BtnAddElementClickCallback()
             addNewSquare(inputSquareSide.value, inputSquareColor.value);
             break;
         case 'text' : 
-            addNewText(inputTextFontSize.value, selectTextFontFamily.value);
+            addNewText(inputTextFontSize.value, selectTextFontFamily.value, inputTextContent.value);
             break;
         default:
             break;
@@ -195,6 +204,7 @@ function bindEventListener()
     inputSquareSide.addEventListener('change', InputSquareSideChangeCallback);
     inputSquareColor.addEventListener('change', InputSquareColorChangeCallback);
     inputTextFontSize.addEventListener('change', InputTextFontSizeChangeCallback);
+    inputTextContent.addEventListener('change', InputTextContentChangeCallback);
     inputGridCellSize.addEventListener('change', refreshGrid);
     inputCanvasWidth.addEventListener('change', InputCanvasWidthChangeCallback);
     inputCanvasHeight.addEventListener('change', InputCanvasHeightChangeCallback);
@@ -301,9 +311,9 @@ function addNewSquare(squareSideLength, squareColor, squarePosX = 20, squarePosY
     listOfShape.push(square);
 }
 
-function addNewText(textFontSize, textFontFamily, textPosX = 20, textPosY = 20)
+function addNewText(textFontSize, textFontFamily, textContent, textPosX = 20, textPosY = 20)
 {
-    let text = new TextSVG(mainCanvas, canvasContainer.getBoundingClientRect(), textFontSize, textPosX, textPosY, 'yellow');
+    let text = new TextSVG(mainCanvas, canvasContainer.getBoundingClientRect(), textFontSize, textContent, textPosX, textPosY, 'yellow');
     text.SVGElement.move(textPosX, textPosY);
     bindShapeListener(text);
     listOfShape.push(text);
@@ -340,6 +350,7 @@ function fillCanvasWithText()
 {
     let textFontSize = parseInt(inputTextFontSize.value);
     let textFontFamily = selectTextFontFamily.value;
+    let textContent = inputTextContent.value;
     const elementSpacing = 0;
 
     let horizontalLineCount = Math.floor(inputCanvasWidth.value / (textFontSize));
@@ -358,7 +369,7 @@ function fillCanvasWithText()
         }
         for(let j = 0; j < verticalLineCount; j++)
         {
-            addNewText(textFontSize, textFontFamily, i * (textFontSize + elementSpacing), j * (textFontSize + elementSpacing));
+            addNewText(textFontSize, textFontFamily, textContent, i * (textFontSize + elementSpacing), j * (textFontSize + elementSpacing));
         }
     }
     

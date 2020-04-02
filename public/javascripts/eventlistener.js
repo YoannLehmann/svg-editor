@@ -49,7 +49,12 @@ function SelectSVGElementsChangeCallback(event)
 
 function SelectTextFontFamilyChangeCallback(event)
 {
-    // @TODO Make the function.
+    
+    if(selectedShape !== null && selectedShape.type === 'text')
+    {
+        selectedShape.changeFontFamily(selectTextFontFamily.value);
+        console.log(selectedShape);
+    }
 }
 
 function InputCanvasWidthChangeCallback(event)
@@ -100,7 +105,10 @@ function InputSquareColorChangeCallback(event)
 
 function InputTextFontSizeChangeCallback(event)
 {
-    // @TODO Make the function.
+    if(selectedShape !== null && selectedShape.type === 'text')
+    {
+        selectedShape.changeFontSize(inputTextFontSize.value);
+    }
 }
 
 function BtnAddElementClickCallback()

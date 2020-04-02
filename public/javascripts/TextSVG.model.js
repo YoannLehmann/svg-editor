@@ -3,31 +3,31 @@ class TextSVG extends Shape
     constructor(container, containerBoundingRect, fontSize, xPos, yPos, color, fontFamily)
     {
         super(container, containerBoundingRect, fontSize, fontSize, xPos, yPos, color, 'text');
-        this.fontFamily = fontFamily;
-        this.fontSize = fontSize;
 
-        //let textContainer = container.group();
-        //this.SVGElement = textContainer.plain("B");
-
-        //textContainer.attr({
-            //transform: "translate(100,100)"
-        //});
-        this.SVGElement = container.plain("B");
+        this.SVGElement = container.plain("C");
         this.SVGElement.attr({
             "text-anchor": "middle",
             "dominant-baseline" : "central"
         });
-        //this.SVGElement = container.plain("A");
-        
-
-        this.SVGElement.font({
-            family:   this.fontFamily
-          , size:     this.fontSize
-          , anchor:   'top'
-          })
-        this.SVGElement.css('cursor', 'pointer');
-        this.SVGElement.css('background-color', 'red');
         this.SVGElement.x(this.xPos);
         this.SVGElement.y(this.yPos);
+        this.changeFontSize(fontSize);
+        this.changeFontFamily(fontFamily);
+    }
+
+    changeFontSize(newFontSize)
+    {
+        this.fontSize = newFontSize;
+        this.SVGElement.font({
+            size: newFontSize
+        });
+    }
+
+    changeFontFamily(newFontFamily)
+    {
+        this.fontFamily = newFontFamily;
+        this.SVGElement.font({
+            family: newFontFamily
+        });
     }
 }

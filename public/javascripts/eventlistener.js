@@ -302,6 +302,9 @@ function bindShapeListener(shape)
     shape.SVGElement.on(['mousemove'], function(event){
         shape.OnMouseMoveCallback(event);
     });
+    shape.SVGElement.on(['mouseover'], function(event){
+        shape.OnMouseOverCallback(event);
+    });
 }
 
 function addNewSquare(squareSideLength, squareColor, squarePosX = 20, squarePosY = 20)

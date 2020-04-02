@@ -14,6 +14,13 @@ class Shape
         this.type = type;
     }
 
+    OnMouseOverCallback(event)
+    {
+        this.SVGElement.css({
+            cursor: "pointer"
+        });
+    }
+
     OnMouseDownCallback(event)
     {
         this.Select();

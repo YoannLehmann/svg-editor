@@ -1,37 +1,198 @@
-let btnNewSquare = document.getElementById('btn-new-square');
-let btnExport = document.getElementById('btn-export');
-let btnAddGrid = document.getElementById('btn-add-grid');
-let btnRemoveGrid = document.getElementById('btn-remove-grid');
-let btnNewText = document.getElementById('btn-new-text');
-let inputSvgFile = document.getElementById('input-svg-file');
+// **** SVG MENU ****
+let btnFillCanvas = document.getElementById('fill-canvas');
+let btnDeleteElement = document.getElementById('delete-element');
+let btnAddElement = document.getElementById('add-element');
+let selectSVGElements = document.getElementById('select-svg-elements'); 
+// ------ SQUARE MENU ------
+let inputSquareSide = document.getElementById('input-square-side');
+let inputSquareColor = document.getElementById('input-square-color');
+// ------ TEXT MENU --------
+let selectTextFontFamily = document.getElementById('select-text-font-family');
+let inputTextFontSize = document.getElementById('input-text-font-size');
+// **** CANVAS MENU ****
 let inputGridCellSize = document.getElementById('input-grid-cell-size')
 let inputCanvasWidth = document.getElementById('input-canvas-width');
 let inputCanvasHeight = document.getElementById('input-canvas-height');
-let mousePressed = false;
+let btnAddGrid = document.getElementById('btn-add-grid');
+let btnRemoveGrid = document.getElementById('btn-remove-grid');
+// **** CONTAINERS ****
 let canvasContainer = document.getElementById('canvas-container');
-let mainCanvas = SVG().addTo('#canvas-container').size(inputCanvasWidth.value, inputCanvasHeight.value);
-mainCanvas.attr('id', 'main-canvas');
-let canvasBackground = mainCanvas.rect(inputCanvasWidth.value,inputCanvasHeight.value).attr({fill:'#ddd'});
+let squareMenuContainer = document.getElementById('square-menu');
+let textMenuContainer = document.getElementById('text-menu');
+let canvasBackground = null;
+let mainCanvas = null;
+// **** EXPORT/IMPORT MENU ****
+let inputImportSVGFile = document.getElementById('input-import-svg-file');
+let btnExportCanvas = document.getElementById('btn-export');
+// **** VARIABLES ****
+let mousePressed = false;
 let listOfShape = [];
 let listOfGridLine = [];
 
+// Initialisation.
+window.onload = function(event)
+{
+    // SVG canvas creation.
+    mainCanvas = SVG().addTo('#canvas-container').size(inputCanvasWidth.value, inputCanvasHeight.value);
+    mainCanvas.attr('id', 'main-canvas');
+    canvasBackground = mainCanvas.rect(inputCanvasWidth.value,inputCanvasHeight.value).attr({fill:'#ddd'});
+    bindEventListener();
+}
 
+// Listener Callback.
+function SelectSVGElementsChangeCallback(event)
+{
+    hideMenus();
+    showMenu(this.value);
+}
 
-btnRemoveGrid.addEventListener('click', RemoveGrid);
+function SelectTextFontFamilyChangeCallback(event)
+{
+    // @TODO Make the function.
+}
 
-inputCanvasWidth.addEventListener('change', function(event){
+function InputCanvasWidthChangeCallback(event)
+{
     mainCanvas.attr({width: this.value});
     canvasBackground.attr({width: this.value});
-    RefreshGrid();
-});
+    refreshGrid();
+}
 
-inputCanvasHeight.addEventListener('change', function(event){
+function InputCanvasHeightChangeCallback(event)
+{
     mainCanvas.attr({height: this.value});
     canvasBackground.attr({height: this.value});
-    RefreshGrid();
-});
+    refreshGrid();
+}
 
-function RemoveGrid()
+function InputSVGFileChangeCallback(event)
+{
+    let file = event.target.files[0];
+
+    if (file) {
+        var reader = new FileReader();
+        reader.readAsText(file, "UTF-8");
+        reader.onload = function (evt) {
+            console.log(evt.target.result);
+        }
+        reader.onerror = function (evt) {
+            console.log("error reading file");
+        }
+    }
+}
+
+function InputSquareSideChangeCallback(event)
+{
+    // @TODO Make the function.
+}
+
+function InputSquareColorChangeCallback(event)
+{
+    // @TODO Make the function.
+}
+
+function InputTextFontSizeChangeCallback(event)
+{
+    // @TODO Make the function.
+}
+
+function BtnAddElementClickCallback()
+{
+    switch(selectSVGElements.value)
+    {
+        case 'square' : 
+            addNewSquare(inputSquareSide.value, inputSquareColor.value);
+            break;
+        case 'text' : 
+            addNewText(inputTextFontSize.value, selectTextFontFamily.value);
+            break;
+        default:
+            break;
+    }
+}
+
+function BtnRemoveGridClickCallback(event)
+{
+    removeGrid();
+}
+
+function BtnRefreshGridClickCallback(event)
+{
+    refreshGrid();
+}
+
+function BtnFillCanvasClickCallback(event)
+{
+    // @TODO Make the function.
+}
+
+function BtnDeleteElementClickCallback(event)
+{
+    // @TODO Make the function.
+}
+
+function CanvasBackgroundClickCallback(event)
+{
+    UnselectAllElement();
+}
+
+function ShapeClickCallback(event)
+{
+    console.log("Shape click callback");
+    console.log(this);
+}
+
+// Functions
+function bindEventListener()
+{
+    btnRemoveGrid.addEventListener('click', BtnRemoveGridClickCallback);
+    btnAddGrid.addEventListener('click', BtnRefreshGridClickCallback);
+    btnFillCanvas.addEventListener('click', BtnFillCanvasClickCallback);
+    btnDeleteElement.addEventListener('click', BtnDeleteElementClickCallback);
+    btnAddElement.addEventListener('click', BtnAddElementClickCallback);
+    inputSquareSide.addEventListener('change', InputSquareSideChangeCallback);
+    inputSquareColor.addEventListener('change', InputSquareColorChangeCallback);
+    inputTextFontSize.addEventListener('change', InputTextFontSizeChangeCallback);
+    inputGridCellSize.addEventListener('change', refreshGrid);
+    inputCanvasWidth.addEventListener('change', InputCanvasWidthChangeCallback);
+    inputCanvasHeight.addEventListener('change', InputCanvasHeightChangeCallback);
+    inputImportSVGFile.addEventListener('change', InputSVGFileChangeCallback);
+    selectSVGElements.addEventListener('change', SelectSVGElementsChangeCallback);
+    selectTextFontFamily.addEventListener('change', SelectTextFontFamilyChangeCallback);
+    canvasBackground.on(['click'], CanvasBackgroundClickCallback);
+}
+
+function showMenu(menuName)
+{
+    // Display the add buttons.
+    btnAddElement.style.display = 'block';
+    btnFillCanvas.style.display = 'block';
+
+    switch(menuName)
+    {
+        case "square":
+            squareMenuContainer.style.display = 'block';
+            break;
+        case "text" : 
+            textMenuContainer.style.display = 'block';
+            break;
+        default: 
+            // Remove the add buttons by default.
+            btnAddElement.style.display = 'none';
+            btnFillCanvas.style.display = 'none';
+            break;
+    }
+
+    
+}
+
+function hideMenus()
+{
+    squareMenuContainer.style.display = 'none';
+    textMenuContainer.style.display = 'none';
+}
+
+function removeGrid()
 {
     for(let i = 0; i < listOfGridLine.length; i++)
     {
@@ -39,11 +200,9 @@ function RemoveGrid()
     }
 }
 
-inputGridCellSize.addEventListener('change', RefreshGrid);
-
-function RefreshGrid()
+function refreshGrid()
 {
-    RemoveGrid();
+    removeGrid();
     
     let cellSize = parseInt(inputGridCellSize.value);
     let horizontalLineCount = Math.round(inputCanvasHeight.value / (cellSize - 5));
@@ -63,44 +222,6 @@ function RefreshGrid()
     }
 }
 
-btnAddGrid.addEventListener('click', RefreshGrid);
-
-canvasBackground.on(['click'], function(event){
-    console.log("Canvas clicked.");
-    UnselectAllElement();
-});
-
-inputSvgFile.addEventListener('click', function(event){
-    console.log("SVG File click");
-});
-
-inputSvgFile.addEventListener('change', function(event){
-    console.log("Change input file.");
-
-    let file = event.target.files[0];
-
-    console.log(event.target.files[0]);
-
-    if (file) {
-        var reader = new FileReader();
-        reader.readAsText(file, "UTF-8");
-        reader.onload = function (evt) {
-            console.log(evt.target.result);
-        }
-        reader.onerror = function (evt) {
-            console.log("error reading file");
-        }
-    }
-});
-
-btnExport.addEventListener('click', function(){
-    if(draw !== null)
-    {
-        console.log(draw.svg());
-        
-    }
-});
-
 function UnselectAllElement()
 {
     for(let i = 0; i < listOfShape.length; i++)
@@ -114,7 +235,7 @@ function bindShapeListener(shape)
 {
     shape.SVGElement.on(['click'], function(event){
         shape.OnClickCallback(event);
-    });
+    }, ShapeClickCallback);
     shape.SVGElement.on(['mouseup'], function(event){
         shape.OnMouseUpCallback(event);
     });
@@ -127,20 +248,21 @@ function bindShapeListener(shape)
     });
 }
 
-btnNewSquare.addEventListener('click', BtnAddNewSquareCallback);
-
-function BtnAddNewSquareCallback()
+function addNewSquare(squareSideLength, squareColor)
 {
-    let square = new Square(mainCanvas, canvasContainer.getBoundingClientRect(), 150, 300, 300, "red");
+    let square = new Square(mainCanvas, canvasContainer.getBoundingClientRect(), squareSideLength, 20, 20, squareColor);
     bindShapeListener(square);
     listOfShape.push(square);
 }
 
-btnNewText.addEventListener('click', BtnAddNewTextCallback);
+function addNewText(textFontSize, textFontFamily)
+{
+    let text = new TextSVG(mainCanvas, canvasContainer.getBoundingClientRect(), textFontSize, 50, 50, 'yellow');
+    bindShapeListener(text);
+    listOfShape.push(text);
+}
 
 function BtnAddNewTextCallback()
 {
-    let text = new TextSVG(mainCanvas, canvasContainer.getBoundingClientRect(), 100, 150, 150, 'yellow');
-    bindShapeListener(text);
-    listOfShape.push(text);
+    
 }

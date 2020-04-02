@@ -1,6 +1,6 @@
 class Shape 
 {
-    constructor(container, containerBoundingRect, width, height, xPos, yPos, color)
+    constructor(container, containerBoundingRect, width, height, xPos, yPos, color, type = 'shape')
     {
         this.container = container;
         this.containerBoundingRect = containerBoundingRect;
@@ -11,6 +11,7 @@ class Shape
         this.color = color;
         this.mousePressed = false;
         this.SVGElement = null;
+        this.type = type;
     }
 
     printDescription()

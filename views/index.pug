@@ -1,12 +1,38 @@
 extends layout
 
+
+
+
 block content
   h1 #{title}
   p #{description}
-  label Shape menu
-  br
-  button(id='btn-new-square') Add new square !
-  button(id='btn-new-text') Add new text !
+  div(id='svg-elements-menu' class='menu')
+    h1 I'm the SVG Menu
+    label Choisir un élément à ajouter : 
+    select(id="select-svg-elements" name="select-svg-elements")
+      option(value="0") Choisir un élément
+      option(value="square") Carré
+      option(value="text") Texte
+    div(id='square-menu' class='menu' hidden)
+      h1 menu du carré
+      label(for="input-square-side") Taille du côté
+      input(type="number" min=5 max=200 value='50' name='input-square-side' id='input-square-side')
+      label(for='input-square-color') Couleur du carré
+      input(class='jscolor' id="input-square-color" value="ab2567")
+    div(id='text-menu' class='menu' hidden)
+      h1 menu du texte
+      label(for="select-text-font-family") Police d'écriture
+      select(id="select-text-font-family" name="select-text-font-family")
+        option(value="Helvetica") Helvetica
+        option(value="Arial") Arial
+      label(for="input-text-font-size") Taille de la police
+      input(id="input-text-font-size" name="input-text-font-size" type="number" min=5 max=150 value=50)  
+
+    br
+    button(id='fill-canvas' hidden) Remplir la zone de cet élément
+    button(id='delete-element' hidden) Supprimer l'élément sélectionné
+    button(id='add-element' hidden) Ajouter un élément
+
   br
   label Canvas
   br
@@ -23,6 +49,6 @@ block content
   br
   label Not working yet
   br
-  input(type='file' id='input-svg-file')
+  input(type='file' id='input-import-svg-file')
   button(id='btn-export') export !
   div(id="canvas-container")

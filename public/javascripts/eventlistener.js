@@ -143,7 +143,11 @@ function BtnFillCanvasClickCallback(event)
 
 function BtnDeleteElementClickCallback(event)
 {
-    // @TODO Make the function.
+    if(selectedShape !== null)
+    {
+        selectedShape.SVGElement.remove();
+        UnselectAllElement();
+    }
 }
 
 function CanvasBackgroundClickCallback(event)
@@ -156,6 +160,7 @@ function ShapeClickCallback(event, shape)
     hideMenus();
     showMenu(shape.type);
     selectedShape = shape;
+    btnDeleteElement.style.display = 'block';
 }
 
 // Functions
@@ -247,6 +252,7 @@ function UnselectAllElement()
     }
 
     selectedShape = null;
+    btnDeleteElement.style.display = 'none';
 }
 
 function bindShapeListener(shape)

@@ -14,28 +14,19 @@ class Shape
         this.type = type;
     }
 
-    printDescription()
-    {
-        console.log("Width : " + this.width + ", Height : " + this.height, ", XPos : " + this.xPos + ", YPos : " + this.yPos);
-    }
-
     OnMouseDownCallback(event)
     {
-        console.log("MouseDown");
         this.Select();
         this.mousePressed = true;
     }
 
     OnMouseUpCallback(event)
     {
-        console.log("MouseUp");
         this.mousePressed = false;
     }
 
     OnMouseMoveCallback(event)
     {
-        console.log("MouseMove");
-
         if(this.mousePressed)
         {
             let containerXPos = this.containerBoundingRect.left;
@@ -63,7 +54,7 @@ class Shape
 
     OnClickCallback(event)
     {
-        console.log("Element clicked.");
+
     }
 
     Select()

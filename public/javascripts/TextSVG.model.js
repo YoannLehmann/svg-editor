@@ -4,7 +4,7 @@ class TextSVG extends Shape
     {
         super(container, containerBoundingRect, fontSize, fontSize, xPos, yPos, color, 'text');
 
-        this.SVGElement = container.plain("C");
+        this.SVGElement = container.plain("420");
         this.SVGElement.attr({
             "text-anchor": "middle",
             "dominant-baseline" : "central"

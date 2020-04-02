@@ -301,9 +301,10 @@ function addNewSquare(squareSideLength, squareColor, squarePosX = 20, squarePosY
     listOfShape.push(square);
 }
 
-function addNewText(textFontSize, textFontFamily)
+function addNewText(textFontSize, textFontFamily, textPosX = 20, textPosY = 20)
 {
-    let text = new TextSVG(mainCanvas, canvasContainer.getBoundingClientRect(), textFontSize, 50, 50, 'yellow');
+    let text = new TextSVG(mainCanvas, canvasContainer.getBoundingClientRect(), textFontSize, textPosX, textPosY, 'yellow');
+    text.SVGElement.move(textPosX, textPosY);
     bindShapeListener(text);
     listOfShape.push(text);
 }
@@ -333,6 +334,32 @@ function fillCanvasWithSquares()
             addNewSquare(squareSideLength, squareColor, i * (squareSideLength + elementSpacing), j * (squareSideLength + elementSpacing));
         }
     }
+}
 
+function fillCanvasWithText()
+{
+    let textFontSize = parseInt(inputTextFontSize.value);
+    let textFontFamily = selectTextFontFamily.value;
+    const elementSpacing = 0;
+
+    let horizontalLineCount = Math.floor(inputCanvasWidth.value / (textFontSize));
+    // Tester si la les carrés + les espaces sont plus grand que la taille totale
+    while((horizontalLineCount * elementSpacing + horizontalLineCount * textFontSize) > inputCanvasWidth.value)
+    {
+        horizontalLineCount--;
+    }
+    
+    for(let i = 0; i < horizontalLineCount; i++)
+    {
+        let verticalLineCount = Math.floor(inputCanvasHeight.value / (textFontSize))
+        while((verticalLineCount * elementSpacing + verticalLineCount * textFontSize) > inputCanvasHeight.value)
+        {
+            verticalLineCount--;
+        }
+        for(let j = 0; j < verticalLineCount; j++)
+        {
+            addNewText(textFontSize, textFontFamily, i * (textFontSize + elementSpacing), j * (textFontSize + elementSpacing));
+        }
+    }
     
 }

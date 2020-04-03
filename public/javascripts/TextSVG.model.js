@@ -1,17 +1,17 @@
 class TextSVG extends Shape 
 {
-    constructor(container, containerBoundingRect, fontSize, textContent, xPos, yPos, color, fontFamily)
+    constructor(container, containerBoundingRect, fontSize, textContent, fontFamily, xPos, yPos, color)
     {
         super(container, containerBoundingRect, fontSize, fontSize, xPos, yPos, color, 'text');
 
-        this.textContent = this.textContent;
+        this.textContent = textContent;
         this.SVGElement = container.plain(textContent);
         this.SVGElement.attr({
             "text-anchor": "middle",
             "dominant-baseline" : "central"
         });
-        this.SVGElement.x(this.xPos);
-        this.SVGElement.y(this.yPos);
+        this.SVGElement.x(xPos);
+        this.SVGElement.y(yPos);
         this.changeFontSize(fontSize);
         this.changeFontFamily(fontFamily);
     }
@@ -22,6 +22,11 @@ class TextSVG extends Shape
         this.SVGElement.font({
             size: newFontSize
         });
+
+        if(this.SVGElement.x() < 0 || this.SVGElement.y() < 0)
+        {
+            this.SVGElement.move(0,0);
+        }
     }
 
     changeFontFamily(newFontFamily)

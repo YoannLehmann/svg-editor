@@ -199,6 +199,7 @@ function ShapeClickCallback(event, shape)
     hideMenus();
     showMenu(shape.type);
     selectedShape = shape;
+    updateMenuWithShape(shape);
     btnDeleteElement.style.display = 'block';
     btnDeleteAllElements.style.display = 'block';
 }
@@ -339,7 +340,7 @@ function addNewSquare(squareSideLength, squareColor, squarePosX = 20, squarePosY
 
 function addNewText(textFontSize, textFontFamily, textContent, textPosX = 20, textPosY = 20)
 {
-    let text = new TextSVG(mainCanvas, canvasContainer.getBoundingClientRect(), textFontSize, textContent, textPosX, textPosY, 'yellow');
+    let text = new TextSVG(mainCanvas, canvasContainer.getBoundingClientRect(), textFontSize, textContent, textFontFamily, textPosX, textPosY, 'yellow');
     text.SVGElement.move(textPosX, textPosY);
     bindShapeListener(text);
     listOfShape.push(text);
@@ -400,4 +401,23 @@ function fillCanvasWithText()
         }
     }
     
+}
+
+function updateMenuWithShape(shape)
+{
+    switch(shape.type)
+    {
+        case 'square' : 
+            inputSquareColor.value = shape.color;
+            inputSquareSide.value = shape.width;
+            break;
+        case 'text' : 
+            inputTextContent.value = shape.textContent;
+            inputTextFontSize.value = shape.fontSize;
+            selectTextFontFamily.value = shape.fontFamily;
+            break;
+        default : 
+
+            break;    
+    }
 }

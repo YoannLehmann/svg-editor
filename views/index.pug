@@ -4,60 +4,108 @@ block content
   div(class='container')
     div(class='row')
       h1 #{title}
+    div(class='row')  
       p #{description}
     div(class='row')
-      div(class='col-sm')
+      div(class='col-8' )
+        div(id="canvas-container")
+      div(class='col-4' id='menu-container')
         div(class='row')
-          div(class='col-sm')
-            div(id="canvas-container")
-          div(class='col-sm')
-            div(id='svg-elements-menu' class='menu')
-              h1 I'm the SVG Menu
-              label Choisir un élément à ajouter : 
-              select(id="select-svg-elements" name="select-svg-elements")
-                option(value="0") Choisir un élément
-                option(value="square") Carré
-                option(value="text") Texte
-              div(id='square-menu' class='menu' hidden)
-                h1 menu du carré
-                label(for="input-square-side") Taille du côté
-                input(type="number" min=5 max=200 value='50' name='input-square-side' id='input-square-side')
-                label(for='input-square-color') Couleur du carré
-                input(class='jscolor' id="input-square-color" value="ab2567")
-              div(id='text-menu' class='menu' hidden)
-                h1 menu du texte
-                label(for="select-text-font-family") Police d'écriture
-                select(id="select-text-font-family" name="select-text-font-family")
-                  option(value="Helvetica") Helvetica
-                  option(value="Arial") Arial
-                label(for="input-text-font-size") Taille de la police
-                input(id="input-text-font-size" name="input-text-font-size" type="number" min=5 max=150 value=50)  
-                label(for="input-text-content")
-                input(id="input-text-content" name="input-text-content" value="A" maxlength="10")
+          h2 Menu SVG
+        div(class='row')
+          div(class='col-5')
+            label Sélectionner l'élément à ajouter 
+          div(class='col-5')
+            select(id="select-svg-elements" name="select-svg-elements")
+              option(value="0") Choisir un élément
+              option(value="square") Carré
+              option(value="text") Texte
+        div(id='square-menu' style='display: none')
+          div(class='row')
+            h3 Menu du carré
+          div(class='row')  
+            div(class='col-1')
+            div(class='col-5 pl-0')
+              label(for="input-square-side") Taille du côté
+            div(class='col-5')
+              input(type="number" class='input-group-text' min=5 max=200 value='50' name='input-square-side' id='input-square-side')
+          div(class='row')
+            div(class='col-1')
+            div(class='col-5 pl-0')
+              label(for='input-square-color') Couleur du carré
+            div(class='col-5')
+              input(class='jscolor' id="input-square-color" value="ab2567")
+        div(id='text-menu' style='display: none')
+          div(class='row')
+            h3 Menu du texte
+          div(class='row')  
+            div(class='col-1') 
+            div(class='col-5 pl-0')
+              label(for="select-text-font-family") Police d'écriture
+            div(class='col-5')
+              select(id="select-text-font-family" name="select-text-font-family")
+                option(value="Helvetica") Helvetica
+                option(value="Arial") Arial
+          div(class='row')  
+            div(class='col-1')
+            div(class='col-5 pl-0')
+              label(for="input-text-font-size") Taille de la police
+            div(class='col-5')
+              input(id="input-text-font-size" name="input-text-font-size" type="number" min=5 max=150 value=50)  
+          div(class='row')
+            div(class='col-1')
+            div(class='col-5 pl-0')
+              label(for="input-text-content") Contenu du texte
+            div(class='col-5') 
+              input(id="input-text-content" name="input-text-content" value="A" maxlength="10")
+        div(class='row')
+          div(class='col-1')
+          div(class='col-10 p-0') 
+            button(class='btn btn-primary' id='btn-fill-canvas' style='display: none;') Remplir la zone de cet élément
+        div(class='row mt-1')
+          div(class='col-1')
+          div(class='col-10 p-0')
+            button(class='btn btn-primary' id='btn-add-element'  style='display: none;') Ajouter un élément
+        div(class='row mt-1')
+          div(class='col-1')
+          div(class='col-10 p-0')
+            button(class='btn btn-danger' id='btn-delete-element' style='display: none;') Supprimer l'élément sélectionné
+        div(class='row mt-1')
+          div(class='col-1')
+          div(class='col-10 p-0')
+            button(class='btn btn-danger' id='btn-delete-all-elements' style='display: none;') Supprimer tous les éléments
 
-              br
-              button(id='btn-fill-canvas' hidden) Remplir la zone de cet élément
-              button(id='btn-delete-element' hidden) Supprimer l'élément sélectionné
-              button(id='btn-add-element'  hidden) Ajouter un élément
-              button(id='btn-delete-all-elements') Supprimer tous les éléments
-
-              br
-              h2 Canvas
-              br
-              div
-                input(id='input-canvas-width'  value='0' type='number' min='100' max='1000')
-                label Longueur 
-              div
-                input(id='input-canvas-height' value='0' type='number' min='100' max='800')
-                label Hauteur
-              br
-              h2 Grid
-              br
-              button(id='btn-add-grid' class='mdc-button mdc-button--raised') Afficher la grille
-              button(id='btn-remove-grid' class='mdc-button mdc-button--raised' hidden) Remove the grid !
-              input(id='input-grid-cell-size' value='50' type='number' min='10' max='1000' hidden)
-              br
-              h2 Not working yet
-              br
-              input(type='file' id='input-import-svg-file')
-              button(id='btn-export') export !
+        div(class='row' class='mt-2')
+          h2 Personnalisation du canvas
+        div(class='row')
+          div(class='col-6')
+            label(for='input-canvas-width') Longueur  
+          div(class='col-6')  
+            input(id='input-canvas-width' name='input-canvas-width' value='500' type='number' min='100' max='1000')
+        div(class='row')  
+          div(class='col-6')  
+            label(for='input-canvas-height') Hauteur
+          div(class='col-6')  
+            input(id='input-canvas-height' name='input-canvas-height' value='500' type='number' min='100' max='800')
+        div(class='row')    
+          h2 Grille du canvas
+        div(class='row')
+          div(class='col-6')
+            label(for='input-grid-cell-size' style='display: none;' id='label-grid-cell-size') Taille des cellules
+          div(class='col-6')
+            input(id='input-grid-cell-size' name="input-grid-cell-size" style='display: none;' value='50' type='number' min='10' max='1000')
+        div(class='row')
+          div(class='col-12')
+            button(class='btn btn-primary' id='btn-add-grid') Afficher la grille
+        div(class='row')
+          div(class='col-12')
+            button(class='btn btn-primary' id='btn-remove-grid' style='display: none;') Cacher la grille
+        
+        div(class='row mt-2')
+          h2 Pas encore fonctionnel
+        div(class='row')
+          div(class='col-12')
+            input(type='file' id='input-import-svg-file')
+        div(class='row mt-2')
+          div(class='col-12')
+            button(class='btn btn-primary' id='btn-export') export !

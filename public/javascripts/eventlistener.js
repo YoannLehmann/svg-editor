@@ -15,6 +15,7 @@ let inputTextContent = document.getElementById('input-text-content');
 let inputGridCellSize = document.getElementById('input-grid-cell-size')
 let inputCanvasWidth = document.getElementById('input-canvas-width');
 let inputCanvasHeight = document.getElementById('input-canvas-height');
+let labelGridCellSize = document.getElementById('label-grid-cell-size');
 let btnAddGrid = document.getElementById('btn-add-grid');
 let btnRemoveGrid = document.getElementById('btn-remove-grid');
 // **** CONTAINERS ****
@@ -174,6 +175,8 @@ function BtnDeleteElementClickCallback(event)
         selectedShape.SVGElement.remove();
         UnselectAllElement();
     }
+
+    (listOfShape.length > 0 ? btnDeleteAllElements.style.display = 'block' : btnDeleteAllElements.style.display = 'none')
 }
 
 function BtnDeleteAllElementsCallback(event)
@@ -183,6 +186,7 @@ function BtnDeleteAllElementsCallback(event)
     {
         listOfShape[i].SVGElement.remove();
     }
+    btnDeleteAllElements.style.display = 'none';
 }
 
 function CanvasBackgroundClickCallback(event)
@@ -196,6 +200,7 @@ function ShapeClickCallback(event, shape)
     showMenu(shape.type);
     selectedShape = shape;
     btnDeleteElement.style.display = 'block';
+    btnDeleteAllElements.style.display = 'block';
 }
 
 // Functions
@@ -256,6 +261,7 @@ function removeGrid()
     inputGridCellSize.style.display = 'none';
     btnAddGrid.style.display = 'block';
     btnRemoveGrid.style.display = 'none';
+    labelGridCellSize.style.display = 'none';
 
     for(let i = 0; i < listOfGridLine.length; i++)
     {
@@ -270,13 +276,14 @@ function refreshGrid()
     btnAddGrid.style.display = 'none';
     btnRemoveGrid.style.display = 'block';
     inputGridCellSize.style.display = 'block';
+    labelGridCellSize.style.display = 'block';
     
     let cellSize = parseInt(inputGridCellSize.value);
     let horizontalLineCount = Math.round(inputCanvasHeight.value / (cellSize - 5));
     for(let i = 1; i < horizontalLineCount; i++)
     {
         let horizontalLine = mainCanvas.line(0, i * cellSize, inputCanvasWidth.value, i * cellSize);
-        horizontalLine.stroke({ color: 'black', width: 1, linecap: 'round' })
+        horizontalLine.stroke({ color: 'black', width: 0.5, linecap: 'round' })
         listOfGridLine.push(horizontalLine);
     }
 
@@ -284,7 +291,7 @@ function refreshGrid()
     for(let i = 1; i < verticalLineCount; i++)
     {
         let verticalLine = mainCanvas.line(i * cellSize, 0, i * cellSize, inputCanvasHeight.value);
-        verticalLine.stroke({ color: 'black', width: 1, linecap: 'round' });
+        verticalLine.stroke({ color: 'black', width: 0.5, linecap: 'round' });
         listOfGridLine.push(verticalLine);
     }
 }
@@ -327,6 +334,7 @@ function addNewSquare(squareSideLength, squareColor, squarePosX = 20, squarePosY
     let square = new Square(mainCanvas, canvasContainer.getBoundingClientRect(), squareSideLength, squarePosX, squarePosY, squareColor);
     bindShapeListener(square);
     listOfShape.push(square);
+    btnDeleteAllElements.style.display = 'block';
 }
 
 function addNewText(textFontSize, textFontFamily, textContent, textPosX = 20, textPosY = 20)
@@ -335,6 +343,7 @@ function addNewText(textFontSize, textFontFamily, textContent, textPosX = 20, te
     text.SVGElement.move(textPosX, textPosY);
     bindShapeListener(text);
     listOfShape.push(text);
+    btnDeleteAllElements.style.display = 'block';
 }
 
 function fillCanvasWithSquares()

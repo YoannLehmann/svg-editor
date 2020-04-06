@@ -1,8 +1,8 @@
 class TextSVG extends Shape 
 {
-    constructor(container, containerBoundingRect, fontSize, textContent, fontFamily, xPos, yPos, color)
+    constructor(container, containerBoundingRect, fontSize, textContent, fontFamily, xPos, yPos, color, printType)
     {
-        super(container, containerBoundingRect, fontSize, fontSize, xPos, yPos, color, 'text');
+        super(container, containerBoundingRect, fontSize, fontSize, xPos, yPos, color, 'text', printType);
 
         this.textContent = textContent;
         this.SVGElement = container.plain(textContent);
@@ -14,6 +14,33 @@ class TextSVG extends Shape
         this.SVGElement.y(yPos);
         this.changeFontSize(fontSize);
         this.changeFontFamily(fontFamily);
+        this.changePrintType(printType);
+    }
+
+    changePrintType(newPrintType)
+    {
+        this.printType = newPrintType;
+        if(this.printType === PrintType.CUTTING)
+        {
+            this.SVGElement.attr({
+                'fill-opacity' : 0
+            });
+            this.SVGElement.stroke({
+                color: 'red',
+                width: 1
+            });
+        }
+        else if(this.printType === PrintType.ENGRAVE)
+        {
+            this.color = 'black';
+            this.SVGElement.attr({
+                'fill-opacity' : 1
+            });
+            this.SVGElement.stroke({
+                color: 'red',
+                width: 0
+            });
+        }
     }
 
     changeFontSize(newFontSize)

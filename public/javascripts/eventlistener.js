@@ -13,6 +13,8 @@ let inputSquareRadioEngrave = document.getElementById('radio-square-engrave');
 let selectTextFontFamily = document.getElementById('select-text-font-family');
 let inputTextFontSize = document.getElementById('input-text-font-size');
 let inputTextContent = document.getElementById('input-text-content');
+let inputTextRadioCutting = document.getElementById('radio-text-cutting');
+let inputTextRadioEngrave = document.getElementById('radio-text-engrave');
 // **** CANVAS MENU ****
 let inputGridCellSize = document.getElementById('input-grid-cell-size')
 let inputCanvasWidth = document.getElementById('input-canvas-width');
@@ -139,16 +141,26 @@ function InputSquareRadioPrintTypeChangeCallback(event)
     }
 }
 
+function InputTextRadioPrintTypeChangeCallback(event)
+{
+    if(selectedShape !== null && selectedShape.type === 'text')
+    {
+        let printType = (inputTextRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
+        selectedShape.changePrintType(printType);
+    }
+}
+
 function BtnAddElementClickCallback()
 {
     switch(selectSVGElements.value)
     {
         case 'square' : 
-            let printType = (inputSquareRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
-            addNewSquare(inputSquareSide.value, inputSquareColor.value, 0, 0, printType);
+            let squarePrintType = (inputSquareRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
+            addNewSquare(inputSquareSide.value, inputSquareColor.value, 0, 0, squarePrintType);
             break;
         case 'text' : 
-            addNewText(inputTextFontSize.value, selectTextFontFamily.value, inputTextContent.value);
+            let textPrintType = (inputTextRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
+            addNewText(inputTextFontSize.value, selectTextFontFamily.value, inputTextContent.value, 0,0,textPrintType);
             break;
         default:
             break;
@@ -235,6 +247,8 @@ function bindEventListener()
     inputSquareColor.addEventListener('change', InputSquareColorChangeCallback);
     inputSquareRadioEngrave.addEventListener('change', InputSquareRadioPrintTypeChangeCallback);
     inputSquareRadioCutting.addEventListener('change', InputSquareRadioPrintTypeChangeCallback);
+    inputTextRadioEngrave.addEventListener('change', InputTextRadioPrintTypeChangeCallback);
+    inputTextRadioCutting.addEventListener('change', InputTextRadioPrintTypeChangeCallback);
     inputTextFontSize.addEventListener('change', InputTextFontSizeChangeCallback);
     inputTextContent.addEventListener('change', InputTextContentChangeCallback);
     inputGridCellSize.addEventListener('change', InputGridCellSizeChangeCallback);
@@ -364,9 +378,9 @@ function addNewSquare(squareSideLength, squareColor, squarePosX = 20, squarePosY
     btnDeleteAllElements.style.display = 'block';
 }
 
-function addNewText(textFontSize, textFontFamily, textContent, textPosX = 20, textPosY = 20)
+function addNewText(textFontSize, textFontFamily, textContent, textPosX = 20, textPosY = 20, printType = PrintType.NO_TYPE)
 {
-    let text = new TextSVG(mainCanvas, canvasContainer.getBoundingClientRect(), textFontSize, textContent, textFontFamily, textPosX, textPosY, 'yellow');
+    let text = new TextSVG(mainCanvas, canvasContainer.getBoundingClientRect(), textFontSize, textContent, textFontFamily, textPosX, textPosY, 'yellow', printType);
     text.SVGElement.move(textPosX, textPosY);
     bindShapeListener(text);
     listOfShape.push(text);

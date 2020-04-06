@@ -31,6 +31,7 @@ let mainCanvas = null;
 // **** EXPORT/IMPORT MENU ****
 let inputImportSVGFile = document.getElementById('input-import-svg-file');
 let btnExportCanvas = document.getElementById('btn-export');
+let btnPrint = document.getElementById('btn-print');
 // **** VARIABLES ****
 let mousePressed = false;
 let gridActive = false;
@@ -43,7 +44,10 @@ window.onload = function(event)
 {
     // SVG canvas creation.
     mainCanvas = SVG().addTo('#canvas-container').size(inputCanvasWidth.value, inputCanvasHeight.value);
-    mainCanvas.attr('id', 'main-canvas');
+    mainCanvas.attr({
+        'id': 'main-canvas',
+        'max-width' : '630px'
+    });
     canvasBackground = mainCanvas.rect(inputCanvasWidth.value,inputCanvasHeight.value).attr({fill:'#ddd'});
     bindEventListener();
 }
@@ -218,6 +222,11 @@ function BtnExportCanvasClickCallback(event)
     saveSvg();
 }
 
+function BtnPrintCanvasClickCallback(event)
+{
+    printCanvas();
+}
+
 function CanvasBackgroundClickCallback(event)
 {
     UnselectAllElement();
@@ -243,6 +252,7 @@ function bindEventListener()
     btnAddElement.addEventListener('click', BtnAddElementClickCallback);
     btnDeleteAllElements.addEventListener('click', BtnDeleteAllElementsClickCallback);
     btnExportCanvas.addEventListener('click', BtnExportCanvasClickCallback);
+    btnPrint.addEventListener('click', BtnPrintCanvasClickCallback);
     inputSquareSide.addEventListener('change', InputSquareSideChangeCallback);
     inputSquareColor.addEventListener('change', InputSquareColorChangeCallback);
     inputSquareRadioEngrave.addEventListener('change', InputSquareRadioPrintTypeChangeCallback);
@@ -462,21 +472,55 @@ function updateMenuWithShape(shape)
     }
 }
 
-function saveSvg() {
+function printCanvas()
+{
+    var mywindow = window.open('', 'my div', 'height=400,width=600');
+    mywindow.document.write('<html><head><title>my div</title>');
+    /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+    mywindow.document.write('</head><body >');
+    mywindow.document.write(getSvgCanvas());
+    mywindow.document.write('</body></html>');
+    mywindow.print();
+    mywindow.close();
+}
+
+function getSvgCanvas()
+{
     // Unselect all elements.
     UnselectAllElement();
+    
     // Hide the background.
     canvasBackground.attr({
         visibility: 'hidden'
     });
+
     // Hide the grid.
     let gridLines = document.getElementsByClassName('grid-line');
     for(let i = 0; i < gridLines.length; i++)
     {
         gridLines[i].style.display = 'none';
     }
+
     // Save the canvas.
-    var svgData = mainCanvas.svg();
+    let canvas = mainCanvas.svg();
+
+    // Show the background.
+    canvasBackground.attr({
+        visibility: 'visible'
+    });
+
+    // Show the grid.
+    for(let i = 0; i < gridLines.length; i++)
+    {
+        gridLines[i].style.display = 'block';
+    }
+
+    return canvas;
+}
+
+function saveSvg() 
+{
+    var svgData = getSvgCanvas();
     var svgBlob = new Blob([svgData], {type:"image/svg+xml;charset=utf-8"});
     var svgUrl = URL.createObjectURL(svgBlob);
     var downloadLink = document.createElement("a");
@@ -485,13 +529,4 @@ function saveSvg() {
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
-    // Show the background.
-    canvasBackground.attr({
-        visibility: 'visible'
-    });
-    // Show the grid.
-    for(let i = 0; i < gridLines.length; i++)
-    {
-        gridLines[i].style.display = 'block';
-    }
 }

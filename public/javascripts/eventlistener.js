@@ -179,7 +179,7 @@ function BtnDeleteElementClickCallback(event)
     (listOfShape.length > 0 ? btnDeleteAllElements.style.display = 'block' : btnDeleteAllElements.style.display = 'none')
 }
 
-function BtnDeleteAllElementsCallback(event)
+function BtnDeleteAllElementsClickCallback(event)
 {
     UnselectAllElement();
     for(let i = 0; i < listOfShape.length; i++)
@@ -187,6 +187,11 @@ function BtnDeleteAllElementsCallback(event)
         listOfShape[i].SVGElement.remove();
     }
     btnDeleteAllElements.style.display = 'none';
+}
+
+function BtnExportCanvasClickCallback(event)
+{
+    saveSvg(mainCanvas, 'test');
 }
 
 function CanvasBackgroundClickCallback(event)
@@ -212,7 +217,8 @@ function bindEventListener()
     btnFillCanvas.addEventListener('click', BtnFillCanvasClickCallback);
     btnDeleteElement.addEventListener('click', BtnDeleteElementClickCallback);
     btnAddElement.addEventListener('click', BtnAddElementClickCallback);
-    btnDeleteAllElements.addEventListener('click', BtnDeleteAllElementsCallback);
+    btnDeleteAllElements.addEventListener('click', BtnDeleteAllElementsClickCallback);
+    btnExportCanvas.addEventListener('click', BtnExportCanvasClickCallback);
     inputSquareSide.addEventListener('change', InputSquareSideChangeCallback);
     inputSquareColor.addEventListener('change', InputSquareColorChangeCallback);
     inputTextFontSize.addEventListener('change', InputTextFontSizeChangeCallback);
@@ -420,4 +426,17 @@ function updateMenuWithShape(shape)
 
             break;    
     }
+}
+
+function saveSvg(svgEl, name) {
+    var svgData = mainCanvas.svg();
+    console.log(svgData);
+    var svgBlob = new Blob([svgData], {type:"image/svg+xml;charset=utf-8"});
+    var svgUrl = URL.createObjectURL(svgBlob);
+    var downloadLink = document.createElement("a");
+    downloadLink.href = svgUrl;
+    downloadLink.download = "newesttree.svg";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
 }

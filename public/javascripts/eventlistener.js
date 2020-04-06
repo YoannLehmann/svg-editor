@@ -290,7 +290,10 @@ function refreshGrid()
     for(let i = 1; i < horizontalLineCount; i++)
     {
         let horizontalLine = mainCanvas.line(0, i * cellSize, inputCanvasWidth.value, i * cellSize);
-        horizontalLine.stroke({ color: 'black', width: 0.5, linecap: 'round' })
+        horizontalLine.stroke({ color: 'black', width: 0.5, linecap: 'round' });
+        horizontalLine.attr({
+            class: 'grid-line'
+        });
         listOfGridLine.push(horizontalLine);
     }
 
@@ -299,6 +302,9 @@ function refreshGrid()
     {
         let verticalLine = mainCanvas.line(i * cellSize, 0, i * cellSize, inputCanvasHeight.value);
         verticalLine.stroke({ color: 'black', width: 0.5, linecap: 'round' });
+        verticalLine.attr({
+            class: 'grid-line'
+        });
         listOfGridLine.push(verticalLine);
     }
 }
@@ -428,15 +434,34 @@ function updateMenuWithShape(shape)
     }
 }
 
-function saveSvg(svgEl, name) {
+function saveSvg() {
+    // Hide the background.
+    canvasBackground.attr({
+        visibility: 'hidden'
+    });
+    // Hide the grid.
+    let gridLines = document.getElementsByClassName('grid-line');
+    for(let i = 0; i < gridLines.length; i++)
+    {
+        gridLines[i].style.display = 'none';
+    }
+    // Save the canvas.
     var svgData = mainCanvas.svg();
-    console.log(svgData);
     var svgBlob = new Blob([svgData], {type:"image/svg+xml;charset=utf-8"});
     var svgUrl = URL.createObjectURL(svgBlob);
     var downloadLink = document.createElement("a");
     downloadLink.href = svgUrl;
-    downloadLink.download = "newesttree.svg";
+    downloadLink.download = Math.floor(Math.random() * 100000000) + ".svg";
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
+    // Show the background.
+    canvasBackground.attr({
+        visibility: 'visible'
+    });
+    // Show the grid.
+    for(let i = 0; i < gridLines.length; i++)
+    {
+        gridLines[i].style.display = 'block';
+    }
 }

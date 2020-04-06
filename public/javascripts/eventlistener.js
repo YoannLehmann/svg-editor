@@ -7,6 +7,8 @@ let selectSVGElements = document.getElementById('select-svg-elements');
 // ------ SQUARE MENU ------
 let inputSquareSide = document.getElementById('input-square-side');
 let inputSquareColor = document.getElementById('input-square-color');
+let inputSquareRadioCutting = document.getElementById('radio-square-cutting');
+let inputSquareRadioEngrave = document.getElementById('radio-square-engrave');
 // ------ TEXT MENU --------
 let selectTextFontFamily = document.getElementById('select-text-font-family');
 let inputTextFontSize = document.getElementById('input-text-font-size');
@@ -128,12 +130,22 @@ function InputTextContentChangeCallback(event)
     }
 }
 
+function InputSquareRadioPrintTypeChangeCallback(event)
+{
+    if(selectedShape !== null && selectedShape.type === 'square')
+    {
+        let printType = (inputSquareRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
+        selectedShape.changePrintType(printType);
+    }
+}
+
 function BtnAddElementClickCallback()
 {
     switch(selectSVGElements.value)
     {
         case 'square' : 
-            addNewSquare(inputSquareSide.value, inputSquareColor.value);
+            let printType = (inputSquareRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
+            addNewSquare(inputSquareSide.value, inputSquareColor.value, 0, 0, printType);
             break;
         case 'text' : 
             addNewText(inputTextFontSize.value, selectTextFontFamily.value, inputTextContent.value);
@@ -191,7 +203,7 @@ function BtnDeleteAllElementsClickCallback(event)
 
 function BtnExportCanvasClickCallback(event)
 {
-    saveSvg(mainCanvas, 'test');
+    saveSvg();
 }
 
 function CanvasBackgroundClickCallback(event)
@@ -221,6 +233,8 @@ function bindEventListener()
     btnExportCanvas.addEventListener('click', BtnExportCanvasClickCallback);
     inputSquareSide.addEventListener('change', InputSquareSideChangeCallback);
     inputSquareColor.addEventListener('change', InputSquareColorChangeCallback);
+    inputSquareRadioEngrave.addEventListener('change', InputSquareRadioPrintTypeChangeCallback);
+    inputSquareRadioCutting.addEventListener('change', InputSquareRadioPrintTypeChangeCallback);
     inputTextFontSize.addEventListener('change', InputTextFontSizeChangeCallback);
     inputTextContent.addEventListener('change', InputTextContentChangeCallback);
     inputGridCellSize.addEventListener('change', InputGridCellSizeChangeCallback);
@@ -342,9 +356,9 @@ function bindShapeListener(shape)
     });
 }
 
-function addNewSquare(squareSideLength, squareColor, squarePosX = 20, squarePosY = 20)
+function addNewSquare(squareSideLength, squareColor, squarePosX = 20, squarePosY = 20, printType = PrintType.NO_TYPE)
 {
-    let square = new Square(mainCanvas, canvasContainer.getBoundingClientRect(), squareSideLength, squarePosX, squarePosY, squareColor);
+    let square = new Square(mainCanvas, canvasContainer.getBoundingClientRect(), squareSideLength, squarePosX, squarePosY, squareColor, printType);
     bindShapeListener(square);
     listOfShape.push(square);
     btnDeleteAllElements.style.display = 'block';
@@ -435,6 +449,8 @@ function updateMenuWithShape(shape)
 }
 
 function saveSvg() {
+    // Unselect all elements.
+    UnselectAllElement();
     // Hide the background.
     canvasBackground.attr({
         visibility: 'hidden'

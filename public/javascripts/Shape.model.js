@@ -1,6 +1,6 @@
 class Shape 
 {
-    constructor(container, containerBoundingRect, width, height, xPos, yPos, color, type = 'shape')
+    constructor(container, containerBoundingRect, width, height, xPos, yPos, color, type = ShapeType.NO_SHAPE, printType = PrintType.NO_TYPE)
     {
         this.container = container;
         this.containerBoundingRect = containerBoundingRect;
@@ -13,6 +13,7 @@ class Shape
         this.SVGElement = null;
         this.type = type;
         this.oldMousePosition = null;
+        this.printType = printType;
     }
 
     OnMouseOverCallback(event)

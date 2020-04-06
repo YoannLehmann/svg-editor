@@ -35,6 +35,18 @@ block content
               label(for='input-square-color') Couleur du carré
             div(class='col-5')
               input(class='jscolor' id="input-square-color" value="ab2567")
+          div(class='row')
+            div(class='col-1')
+            div(class='col-5 pl-0')
+              label(for='radio-square-cutting') Graver
+            div(class='col-5')
+              input(type='radio' id='radio-square-cutting' name='square-print-type' value='cutting' checked)
+          div(class='row')
+            div(class='col-1')
+            div(class='col-5 pl-0')
+              label(for='radio-square-engrave') Découper
+            div(class='col-5')
+              input(type='radio' id='radio-square-engrave' name='square-print-type' value='engrave')    
         div(id='text-menu' style='display: none')
           div(class='row')
             h3 Menu du texte

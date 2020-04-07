@@ -98,7 +98,8 @@ class Shape
             'width' : this.width,
             'height' : this.height,
             'color' : this.color,
-            'print-type' : this.printType
+            'print-type' : this.printType,
+            'node-type' : this.type
         });
     }
 }

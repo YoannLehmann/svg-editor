@@ -13,6 +13,7 @@ class Square extends Shape
         this.SVGElement.attr({
             fill: 'black'
         });
+        this.updateAttr();
     }
 
     changePrintType(newPrintType)
@@ -52,4 +53,8 @@ class Square extends Shape
         });
     }
 
+    updateAttr()
+    {
+        super.updateAttr();
+    }
 }

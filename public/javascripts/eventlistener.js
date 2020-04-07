@@ -50,7 +50,10 @@ window.onload = function(event)
         'id': 'main-canvas',
         'max-width' : '630px'
     });
-    canvasBackground = mainCanvas.rect(inputCanvasWidth.value,inputCanvasHeight.value).attr({fill:'#ddd'});
+    canvasBackground = mainCanvas.rect(inputCanvasWidth.value,inputCanvasHeight.value).attr({
+        fill:'#ddd',
+        id : 'canvas-background'
+    });
     bindEventListener();
 }
 
@@ -262,7 +265,11 @@ function initImportedFile()
         'id': 'main-canvas',
         'max-width' : '630px'
     });
-    canvasBackground = mainCanvas.rect(inputCanvasWidth.value,inputCanvasHeight.value).attr({fill:'#ddd'});
+    canvasBackground = mainCanvas.rect(inputCanvasWidth.value,inputCanvasHeight.value).attr({
+        fill:'#ddd',
+        id: 'canvas-background'
+    });
+    bindEventListener();
     /*
     mainCanvas = SVG().addTo('#canvas-container').size(inputCanvasWidth.value, inputCanvasHeight.value);
     mainCanvas.attr({
@@ -275,17 +282,20 @@ function initImportedFile()
     for(let i = 0; i < importFileContent.childNodes.length; i++)
     {
         let node = importFileContent.childNodes[i];
-        console.log(node.nodeName);
-        switch(node.nodeName)
+        console.log(node.getAttribute('id') === 'canvas-background');
+        (node.getAttribute('id') === 'canvas-background' ? node.setAttribute('node-type', 'other') : null)
+        console.log(node.getAttribute('node-type'));
+        switch(node.getAttribute('node-type'))
         {
             case 'text' : 
                 addNewText(node.getAttribute('font-size'), node.getAttribute('font-family'), node.textContent, parseInt(node.getAttribute('x')), parseInt(node.getAttribute('y')), node.getAttribute('print-type'));
                 break;
-            case 'rect' :
+            case 'square' :
+                addNewSquare(node.getAttribute('width'), node.getAttribute('color'), parseInt(node.getAttribute('x')), parseInt(node.getAttribute('y')), node.getAttribute('print-type'));
                 break;
         }
     }
-    bindEventListener();
+    
 }
 
 function CanvasBackgroundClickCallback(event)

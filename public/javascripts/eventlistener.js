@@ -384,14 +384,24 @@ function initImportedFile()
     for(let i = 0; i < importFileContent.childNodes.length; i++)
     {
         let node = importFileContent.childNodes[i];
-        console.log("NODE : ");
-        console.log(node instanceof SVGElement);
         (node.id === 'canvas-background' ? node.setAttribute('node-type', 'other') : null)
         if(node instanceof SVGElement)
         {
             let nodeType = null;
             (node.getAttribute('node-type') === null ? nodeType = node.tagName : nodeType = node.getAttribute('node-type'));
             console.log("Node type : " + nodeType);
+            console.log(node);
+
+            // Faire une fonction récursive.
+            if(nodeType == 'g')
+            {
+                console.log("inside g");
+                console.log(node.childNodes);
+                node = node.childNodes[1];
+                nodeType = node.tagName;
+                console.log("New node type after g : " + nodeType);
+                console.log(node);
+            }
 
             switch(nodeType)
             {
@@ -404,6 +414,9 @@ function initImportedFile()
                 case 'path' : 
                     addNewPath(node.getAttribute('d'), node.getAttribute('x'), node.getAttribute('y'), node.getAttribute('print-type'));    
                     break;
+                case 'polyline' :
+                    addNewPolyline(node.getAttribute('points'), node.getAttribute('x'), node.getAttribute('y'), node.getAttribute('print-type'));
+                    break;    
                 default :
                     console.log("Other");
                     console.log(node);

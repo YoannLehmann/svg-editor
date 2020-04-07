@@ -39,5 +39,9 @@ class Path extends Shape {
     updateAttr()
     {
         super.updateAttr();
+
+        this.SVGElement.attr({
+            'path-content' : this.pathContent
+        });
     }
 }

@@ -361,7 +361,11 @@ function initImportedFile()
             case 'square' :
                 addNewSquare(node.getAttribute('width'), node.getAttribute('color'), parseInt(node.getAttribute('x')), parseInt(node.getAttribute('y')), node.getAttribute('print-type'));
                 break;
-            case 'other' :
+            case 'path' : 
+
+                addNewPath(node.getAttribute('d'), node.getAttribute('x'), node.getAttribute('y'), node.getAttribute('print-type'));    
+                break;
+            default :
                 console.log("Other");
                 console.log(node);
                 canvasWidth = node.getAttribute('width');

@@ -5,21 +5,25 @@ let btnAddElement = document.getElementById('btn-add-element');
 let btnDeleteAllElements = document.getElementById('btn-delete-all-elements')
 let selectSVGElements = document.getElementById('select-svg-elements'); 
 // ------ SQUARE MENU ------
+let squareTitle = document.getElementById('square-title');
 let inputSquareSide = document.getElementById('input-square-side');
 let inputSquareColor = document.getElementById('input-square-color');
 let inputSquareRadioCutting = document.getElementById('radio-square-cutting');
 let inputSquareRadioEngrave = document.getElementById('radio-square-engrave');
 // ------ TEXT MENU --------
+let textTitle = document.getElementById('text-title');
 let selectTextFontFamily = document.getElementById('select-text-font-family');
 let inputTextFontSize = document.getElementById('input-text-font-size');
 let inputTextContent = document.getElementById('input-text-content');
 let inputTextRadioCutting = document.getElementById('radio-text-cutting');
 let inputTextRadioEngrave = document.getElementById('radio-text-engrave');
 // ----- PATH MENU --------
+let pathTitle = document.getElementById('path-title');
 let inputPathRadioCutting = document.getElementById('radio-path-cutting');
 let inputPathRadioEngrave = document.getElementById('radio-path-engrave');
 let inputPathContent = document.getElementById('input-path-content');
 // ----- POLYLINE MENU --------
+let polylineTitle = document.getElementById('polyline-title');
 let inputPolylineRadioCutting = document.getElementById('radio-polyline-cutting');
 let inputPolylineRadioEngrave = document.getElementById('radio-polyline-engrave');
 let inputPolylineContent = document.getElementById('input-polyline-content');
@@ -470,6 +474,10 @@ function hideMenus()
     textMenuContainer.style.display = 'none';
     pathMenuContainer.style.display = 'none';
     polylineMenuContainer.style.display = 'none';
+    textTitle.innerText = 'Menu du texte';
+    squareTitle.innerText = 'Menu du carré';
+    polylineTitle.innerText = 'Menu de la polyligne';
+    pathTitle.innerText = 'Menu du tracé';
 }
 
 function removeGrid()
@@ -529,6 +537,10 @@ function UnselectAllElement()
 
     selectedShape = null;
     btnDeleteElement.style.display = 'none';
+    textTitle.innerText = 'Menu du texte';
+    squareTitle.innerText = 'Menu du carré';
+    polylineTitle.innerText = 'Menu de la polyligne';
+    pathTitle.innerText = 'Menu du tracé';
 }
 
 function bindShapeListener(shape)
@@ -652,15 +664,27 @@ function updateMenuWithShape(shape)
     switch(shape.type)
     {
         case 'square' : 
+            squareTitle.innerText = 'Menu du carré (élément sélectionné)';
             inputSquareColor.value = shape.color;
             inputSquareSide.value = shape.width;
+            selectSVGElements.value = 'square';
             (shape.getPrintType() === 'cutting' ? inputSquareRadioCutting.checked = 'checked' : inputSquareRadioEngrave.checked = 'checked')
             break;
         case 'text' : 
+            textTitle.innerText = 'Menu du texte (élément sélectionné)';
             inputTextContent.value = shape.textContent;
             inputTextFontSize.value = shape.fontSize;
             selectTextFontFamily.value = shape.fontFamily;
+            selectSVGElements.value = 'text';
             (shape.getPrintType() === 'cutting' ? inputTextRadioCutting.checked = 'checked' : inputTextRadioEngrave.checked = 'checked')
+            break;
+        case 'path' :
+            pathTitle.innerText = 'Menu du tracé (élément sélectionné)';
+            selectSVGElements.value = 'path';
+            break;
+        case 'polyline':
+            polylineTitle.innerText = 'Menu de la polyligne (élément sélectionné)';
+            selectSVGElements.value = 'polyline';
             break;
         default : 
 

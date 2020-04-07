@@ -319,8 +319,8 @@ function CanvasBackgroundClickCallback(event)
 function ShapeClickCallback(event, shape)
 {
     hideMenus();
-    showMenu(shape.type);
     selectedShape = shape;
+    showMenu(shape.type);
     updateMenuWithShape(shape);
     btnDeleteElement.style.display = 'block';
     btnDeleteAllElements.style.display = 'block';
@@ -444,10 +444,6 @@ function showMenu(menuName)
     {
         case "square":
             squareMenuContainer.style.display = 'block';
-            if(selectedShape !== null && selectedShape.type === 'square')
-            {
-                (selectedShape.getAttribute('print-type') === 'cutting' ? inputSquareRadioCutting.checked = true : inputSquareRadioEngrave.checked = true)
-            }
             break;
         case "text" : 
             textMenuContainer.style.display = 'block';
@@ -658,11 +654,13 @@ function updateMenuWithShape(shape)
         case 'square' : 
             inputSquareColor.value = shape.color;
             inputSquareSide.value = shape.width;
+            (shape.getPrintType() === 'cutting' ? inputSquareRadioCutting.checked = 'checked' : inputSquareRadioEngrave.checked = 'checked')
             break;
         case 'text' : 
             inputTextContent.value = shape.textContent;
             inputTextFontSize.value = shape.fontSize;
             selectTextFontFamily.value = shape.fontFamily;
+            (shape.getPrintType() === 'cutting' ? inputTextRadioCutting.checked = 'checked' : inputTextRadioEngrave.checked = 'checked')
             break;
         default : 
 

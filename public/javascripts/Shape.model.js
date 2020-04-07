@@ -15,7 +15,6 @@ class Shape
         this.SVGElement = null;
         this.type = type;
         this.oldMousePosition = null;
-        this.printType = printType;
     }
 
     OnMouseOverCallback(event)
@@ -79,10 +78,7 @@ class Shape
         this.updateAttr();
     }
 
-    OnClickCallback(event)
-    {
-
-    }
+    OnClickCallback(event){}
 
     Select()
     {
@@ -109,5 +105,37 @@ class Shape
     {
         this.containerWidth = newContainerWidth;
         this.containerHeight = newContainerHeight;
+    }
+
+    changePrintType(newPrintType)
+    {
+        this.printType = newPrintType;
+
+        if(this.printType === PrintType.CUTTING)
+        {
+            this.SVGElement.attr({
+                'fill-opacity' : 0
+            });
+            this.SVGElement.stroke({
+                color: 'red',
+                width: 1
+            });
+        }
+        else if(this.printType === PrintType.ENGRAVE)
+        {
+            this.color = 'black';
+            this.SVGElement.attr({
+                'fill-opacity' : 1
+            });
+            this.SVGElement.stroke({
+                color: 'red',
+                width: 0
+            });
+        }
+    }
+
+    getPrintType()
+    {
+        return this.printType;
     }
 }

@@ -79,6 +79,11 @@ function InputCanvasWidthChangeCallback(event)
     mainCanvas.attr({width: this.value});
     canvasBackground.attr({width: this.value});
     (gridActive ? refreshGrid() : null)
+
+    for(let i = 0; i < listOfShape.length; i++)
+    {
+        listOfShape[i].updateContainerSize(inputCanvasWidth.value, inputCanvasHeight.value);
+    }
 }
 
 function InputCanvasHeightChangeCallback(event)
@@ -86,6 +91,11 @@ function InputCanvasHeightChangeCallback(event)
     mainCanvas.attr({height: this.value});
     canvasBackground.attr({height: this.value});
     (gridActive ? refreshGrid() : null)
+
+    for(let i = 0; i < listOfShape.length; i++)
+    {
+        listOfShape[i].updateContainerSize(inputCanvasWidth.value, inputCanvasHeight.value);
+    }
 }
 
 function InputGridCellSizeChangeCallback(event)
@@ -454,7 +464,7 @@ function bindShapeListener(shape)
 
 function addNewSquare(squareSideLength, squareColor, squarePosX = 20, squarePosY = 20, printType = PrintType.NO_TYPE)
 {
-    let square = new Square(mainCanvas, canvasContainer.getBoundingClientRect(), squareSideLength, squarePosX, squarePosY, squareColor, printType);
+    let square = new Square(mainCanvas, canvasContainer.getBoundingClientRect(), inputCanvasWidth.value, inputCanvasHeight.value, squareSideLength, squarePosX, squarePosY, squareColor, printType);
     bindShapeListener(square);
     listOfShape.push(square);
     btnDeleteAllElements.style.display = 'block';
@@ -462,7 +472,7 @@ function addNewSquare(squareSideLength, squareColor, squarePosX = 20, squarePosY
 
 function addNewText(textFontSize, textFontFamily, textContent, textPosX = 20, textPosY = 20, printType = PrintType.NO_TYPE)
 {
-    let text = new TextSVG(mainCanvas, canvasContainer.getBoundingClientRect(), textFontSize, textContent, textFontFamily, textPosX, textPosY, 'yellow', printType);
+    let text = new TextSVG(mainCanvas, canvasContainer.getBoundingClientRect(), inputCanvasWidth.value, inputCanvasHeight.value, textFontSize, textContent, textFontFamily, textPosX, textPosY, 'yellow', printType);
     text.SVGElement.move(textPosX, textPosY);
     bindShapeListener(text);
     listOfShape.push(text);

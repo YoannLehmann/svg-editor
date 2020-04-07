@@ -1,8 +1,8 @@
 class TextSVG extends Shape 
 {
-    constructor(container, containerBoundingRect, fontSize, textContent, fontFamily, xPos, yPos, color, printType)
+    constructor(container, containerBoundingRect, containerWidth, containerHeight, fontSize, textContent, fontFamily, xPos, yPos, color, printType)
     {
-        super(container, containerBoundingRect, fontSize, fontSize, xPos, yPos, color, 'text', printType);
+        super(container, containerBoundingRect, containerWidth, containerHeight, fontSize, fontSize, xPos, yPos, color, 'text', printType);
 
         this.textContent = textContent;
         this.SVGElement = container.plain(textContent);

@@ -1,9 +1,11 @@
 class Shape 
 {
-    constructor(container, containerBoundingRect, width, height, xPos, yPos, color, type = ShapeType.NO_SHAPE, printType = PrintType.NO_TYPE)
+    constructor(container, containerBoundingRect, containerWidth, containerHeight, width, height, xPos, yPos, color, type = ShapeType.NO_SHAPE, printType = PrintType.NO_TYPE)
     {
         this.container = container;
         this.containerBoundingRect = containerBoundingRect;
+        this.containerWidth = containerWidth;
+        this.containerHeight = containerHeight;
         this.width = width;
         this.height = height;
         this.xPos = xPos;
@@ -62,12 +64,12 @@ class Shape
             this.oldMousePosition = newMousePosition;
         
             // @TODO Modifier la taille de la zone pour que ce soit automatique.
-            if(newPosX >= 0 && newPosX <= 500 - this.width)
+            if(newPosX >= 0 && newPosX <= this.containerWidth - this.width)
             {
                 this.SVGElement.x(newPosX);
             }
             
-            if(newPosY >= 0 && newPosY <= 300 - this.height)
+            if(newPosY >= 0 && newPosY <= this.containerHeight - this.height)
             {
                 this.SVGElement.y(newPosY);
             }
@@ -101,5 +103,11 @@ class Shape
             'print-type' : this.printType,
             'node-type' : this.type
         });
+    }
+
+    updateContainerSize(newContainerWidth, newContainerHeight)
+    {
+        this.containerWidth = newContainerWidth;
+        this.containerHeight = newContainerHeight;
     }
 }

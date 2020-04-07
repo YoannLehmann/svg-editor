@@ -270,10 +270,18 @@ function BtnImportClickCallback(event)
         var svgHTML = new DOMParser().parseFromString(importFileContent, "text/xml");
         console.log(svgHTML);
         // Test if first child is a comment.
-        let svgContent = svgHTML.firstChild;
-        //console.log(svgHTML.childNodes[1]);
-        //console.log(svgHTML.childNodes[2]);
-        //(typeof svgContent === 'object' ? svgContent = svgHTML.childNodes[2] : null)
+        let contentIndex = 0;
+        let svgContent = svgHTML.childNodes[contentIndex];
+        while(!(svgContent instanceof SVGElement))
+        {
+            contentIndex++;
+            svgContent = svgHTML.childNodes[contentIndex];
+        }
+        
+        console.log("SVG CONTENT");
+        console.log(svgHTML.firstChild instanceof SVGElement);
+        console.log(svgHTML.childNodes[1] instanceof SVGElement);
+        console.log(svgHTML.childNodes[2] instanceof SVGElement);
         svgContent.id = 'main-canvas';
         //console.log(svgContent);
         mainCanvas.remove();
@@ -341,42 +349,57 @@ function initImportedFile()
     });
     canvasBackground = mainCanvas.rect(inputCanvasWidth.value,inputCanvasHeight.value).attr({
         fill:'#ddd',
-        id: 'canvas-background'
+        id: 'canvas-background',
+        width: 500,
+        height: 400
     });
     bindEventListener();
     let canvasWidth = 0;
     let canvasHeight = 0;
 
+    console.log("IMPORTED FILE : ");
+    console.log(importFileContent);
+    console.log("IMPORTED FILE SECOND CHILD");
+    console.log(importFileContent.childNodes[1]);
+
     for(let i = 0; i < importFileContent.childNodes.length; i++)
     {
         let node = importFileContent.childNodes[i];
-        console.log(node.getAttribute('id') === 'canvas-background');
-        (node.getAttribute('id') === 'canvas-background' ? node.setAttribute('node-type', 'other') : null)
-        console.log(node.getAttribute('node-type'));
-        switch(node.getAttribute('node-type'))
+        console.log("NODE : ");
+        console.log(node instanceof SVGElement);
+        (node.id === 'canvas-background' ? node.setAttribute('node-type', 'other') : null)
+        if(node instanceof SVGElement)
         {
-            case 'text' : 
-                addNewText(node.getAttribute('font-size'), node.getAttribute('font-family'), node.textContent, parseInt(node.getAttribute('x')), parseInt(node.getAttribute('y')), node.getAttribute('print-type'));
-                break;
-            case 'square' :
-                addNewSquare(node.getAttribute('width'), node.getAttribute('color'), parseInt(node.getAttribute('x')), parseInt(node.getAttribute('y')), node.getAttribute('print-type'));
-                break;
-            case 'path' : 
+            let nodeType = null;
+            (node.getAttribute('node-type') === null ? nodeType = node.tagName : nodeType = node.getAttribute('node-type'));
+            console.log("Node type : " + nodeType);
 
-                addNewPath(node.getAttribute('d'), node.getAttribute('x'), node.getAttribute('y'), node.getAttribute('print-type'));    
-                break;
-            default :
-                console.log("Other");
-                console.log(node);
-                canvasWidth = node.getAttribute('width');
-                canvasHeight = node.getAttribute('height');
+            switch(nodeType)
+            {
+                case 'text' : 
+                    addNewText(node.getAttribute('font-size'), node.getAttribute('font-family'), node.textContent, parseInt(node.getAttribute('x')), parseInt(node.getAttribute('y')), node.getAttribute('print-type'));
+                    break;
+                case 'square' :
+                    addNewSquare(node.getAttribute('width'), node.getAttribute('color'), parseInt(node.getAttribute('x')), parseInt(node.getAttribute('y')), node.getAttribute('print-type'));
+                    break;
+                case 'path' : 
+                    addNewPath(node.getAttribute('d'), node.getAttribute('x'), node.getAttribute('y'), node.getAttribute('print-type'));    
+                    break;
+                default :
+                    console.log("Other");
+                    console.log(node);
+                    canvasWidth = node.getAttribute('width');
+                    canvasHeight = node.getAttribute('height');
+            }
         }
     }
     const e = new Event("change");
+    /*
     inputCanvasWidth.value = canvasWidth;
     inputCanvasWidth.dispatchEvent(e);
     inputCanvasHeight.value = canvasHeight;
     inputCanvasHeight.dispatchEvent(e);
+    */
 }
 
 function showMenu(menuName)
@@ -389,6 +412,10 @@ function showMenu(menuName)
     {
         case "square":
             squareMenuContainer.style.display = 'block';
+            if(selectedShape !== null && selectedShape.type === 'square')
+            {
+                (selectedShape.getAttribute('print-type') === 'cutting' ? inputSquareRadioCutting.checked = true : inputSquareRadioEngrave.checked = true)
+            }
             break;
         case "text" : 
             textMenuContainer.style.display = 'block';
@@ -512,6 +539,7 @@ function addNewText(textFontSize, textFontFamily, textContent, textPosX = 20, te
 
 function addNewPath(pathContent, pathPosX = 50, pathPosY = 50, printType = PrintType.NO_TYPE)
 {
+    console.log("Add new path" + pathContent);
     let path = new Path(mainCanvas, canvasContainer.getBoundingClientRect(), inputCanvasWidth.value, inputCanvasHeight.value, 50, 50, pathPosX, pathPosY, 'yellow', printType, pathContent);
     path.width = 100;
     path.height = 100;

@@ -268,46 +268,6 @@ function BtnImportClickCallback(event)
 
 }
 
-function initImportedFile()
-{
-    mainCanvas = SVG().addTo('#canvas-container').size(inputCanvasWidth.value, inputCanvasHeight.value);
-    mainCanvas.attr({
-        'id': 'main-canvas',
-        'max-width' : '630px'
-    });
-    canvasBackground = mainCanvas.rect(inputCanvasWidth.value,inputCanvasHeight.value).attr({
-        fill:'#ddd',
-        id: 'canvas-background'
-    });
-    bindEventListener();
-    /*
-    mainCanvas = SVG().addTo('#canvas-container').size(inputCanvasWidth.value, inputCanvasHeight.value);
-    mainCanvas.attr({
-        'id': 'main-canvas',
-        'max-width' : '630px'
-    });
-    canvasBackground = mainCanvas.rect(inputCanvasWidth.value,inputCanvasHeight.value).attr({fill:'#ddd'});
-    */
-
-    for(let i = 0; i < importFileContent.childNodes.length; i++)
-    {
-        let node = importFileContent.childNodes[i];
-        console.log(node.getAttribute('id') === 'canvas-background');
-        (node.getAttribute('id') === 'canvas-background' ? node.setAttribute('node-type', 'other') : null)
-        console.log(node.getAttribute('node-type'));
-        switch(node.getAttribute('node-type'))
-        {
-            case 'text' : 
-                addNewText(node.getAttribute('font-size'), node.getAttribute('font-family'), node.textContent, parseInt(node.getAttribute('x')), parseInt(node.getAttribute('y')), node.getAttribute('print-type'));
-                break;
-            case 'square' :
-                addNewSquare(node.getAttribute('width'), node.getAttribute('color'), parseInt(node.getAttribute('x')), parseInt(node.getAttribute('y')), node.getAttribute('print-type'));
-                break;
-        }
-    }
-    
-}
-
 function CanvasBackgroundClickCallback(event)
 {
     UnselectAllElement();
@@ -350,6 +310,49 @@ function bindEventListener()
     selectSVGElements.addEventListener('change', SelectSVGElementsChangeCallback);
     selectTextFontFamily.addEventListener('change', SelectTextFontFamilyChangeCallback);
     canvasBackground.on(['click'], CanvasBackgroundClickCallback);
+}
+
+function initImportedFile()
+{
+    mainCanvas = SVG().addTo('#canvas-container').size(inputCanvasWidth.value, inputCanvasHeight.value);
+    mainCanvas.attr({
+        'id': 'main-canvas',
+        'max-width' : '630px'
+    });
+    canvasBackground = mainCanvas.rect(inputCanvasWidth.value,inputCanvasHeight.value).attr({
+        fill:'#ddd',
+        id: 'canvas-background'
+    });
+    bindEventListener();
+    let canvasWidth = 0;
+    let canvasHeight = 0;
+
+    for(let i = 0; i < importFileContent.childNodes.length; i++)
+    {
+        let node = importFileContent.childNodes[i];
+        console.log(node.getAttribute('id') === 'canvas-background');
+        (node.getAttribute('id') === 'canvas-background' ? node.setAttribute('node-type', 'other') : null)
+        console.log(node.getAttribute('node-type'));
+        switch(node.getAttribute('node-type'))
+        {
+            case 'text' : 
+                addNewText(node.getAttribute('font-size'), node.getAttribute('font-family'), node.textContent, parseInt(node.getAttribute('x')), parseInt(node.getAttribute('y')), node.getAttribute('print-type'));
+                break;
+            case 'square' :
+                addNewSquare(node.getAttribute('width'), node.getAttribute('color'), parseInt(node.getAttribute('x')), parseInt(node.getAttribute('y')), node.getAttribute('print-type'));
+                break;
+            case 'other' :
+                console.log("Other");
+                console.log(node);
+                canvasWidth = node.getAttribute('width');
+                canvasHeight = node.getAttribute('height');
+        }
+    }
+    const e = new Event("change");
+    inputCanvasWidth.value = canvasWidth;
+    inputCanvasWidth.dispatchEvent(e);
+    inputCanvasHeight.value = canvasHeight;
+    inputCanvasHeight.dispatchEvent(e);
 }
 
 function showMenu(menuName)

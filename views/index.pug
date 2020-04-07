@@ -20,6 +20,26 @@ block content
               option(value="0") Choisir un élément
               option(value="square") Carré
               option(value="text") Texte
+              option(value="path") Tracé
+        div(id='path-menu' style='display: none;')
+          div(class='row')
+            div(class='col-1')
+            div(class='col-5 pl-0')
+              label(for='radio-path-cutting') Découper
+            div(class='col-5')
+              input(type='radio' id='radio-path-cutting' name='path-print-type' value='cutting' checked)
+          div(class='row')
+            div(class='col-1')
+            div(class='col-5 pl-0')
+              label(for='radio-path-engrave') Graver
+            div(class='col-5')
+              input(type='radio' id='radio-path-engrave' name='path-print-type' value='engrave') 
+          div(class='row')
+            div(class='col-1')
+            div(class='col-5 pl-0')
+              label(for="input-path-content") Contenu du tracé
+            div(class='col-5 pl-0')
+              input(type='text' class='input-group-text' name='input-path-content' id='input-path-content')  
         div(id='square-menu' style='display: none')
           div(class='row')
             h3 Menu du carré
@@ -38,13 +58,13 @@ block content
           div(class='row')
             div(class='col-1')
             div(class='col-5 pl-0')
-              label(for='radio-square-cutting') Graver
+              label(for='radio-square-cutting') Découper
             div(class='col-5')
               input(type='radio' id='radio-square-cutting' name='square-print-type' value='cutting' checked)
           div(class='row')
             div(class='col-1')
             div(class='col-5 pl-0')
-              label(for='radio-square-engrave') Découper
+              label(for='radio-square-engrave') Graver
             div(class='col-5')
               input(type='radio' id='radio-square-engrave' name='square-print-type' value='engrave')    
         div(id='text-menu' style='display: none')
@@ -73,13 +93,13 @@ block content
           div(class='row')
             div(class='col-1')
             div(class='col-5 pl-0')
-              label(for='radio-text-cutting') Graver
+              label(for='radio-text-cutting') Découper
             div(class='col-5')
               input(type='radio' id='radio-text-cutting' name='text-print-type' value='cutting' checked)
           div(class='row')
             div(class='col-1')
             div(class='col-5 pl-0')
-              label(for='radio-text-engrave') Découper
+              label(for='radio-text-engrave') Graver
             div(class='col-5')
               input(type='radio' id='radio-text-engrave' name='text-print-type' value='engrave')  
         div(class='row')

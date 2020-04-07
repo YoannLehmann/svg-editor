@@ -15,6 +15,11 @@ let inputTextFontSize = document.getElementById('input-text-font-size');
 let inputTextContent = document.getElementById('input-text-content');
 let inputTextRadioCutting = document.getElementById('radio-text-cutting');
 let inputTextRadioEngrave = document.getElementById('radio-text-engrave');
+// ----- PATH MENU --------
+let inputPathRadioCutting = document.getElementById('radio-path-cutting');
+let inputPathRadioEngrave = document.getElementById('radio-path-engrave');
+let inputPathContent = document.getElementById('input-path-content');
+
 // **** CANVAS MENU ****
 let inputGridCellSize = document.getElementById('input-grid-cell-size')
 let inputCanvasWidth = document.getElementById('input-canvas-width');
@@ -26,6 +31,7 @@ let btnRemoveGrid = document.getElementById('btn-remove-grid');
 let canvasContainer = document.getElementById('canvas-container');
 let squareMenuContainer = document.getElementById('square-menu');
 let textMenuContainer = document.getElementById('text-menu');
+let pathMenuContainer = document.getElementById('path-menu');
 let canvasBackground = null;
 let mainCanvas = null;
 // **** EXPORT/IMPORT MENU ****
@@ -171,9 +177,17 @@ function InputTextRadioPrintTypeChangeCallback(event)
     }
 }
 
+function InputPathRadioPrintTypeChangeCallback(event)
+{
+    if(selectedShape !== null && selectedShape.type === 'path')
+    {
+        let printType = (inputPathRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
+        selectedShape.changePrintType(printType);
+    }
+}
+
 function BtnAddElementClickCallback()
 {
-    console.log("add element click");
     switch(selectSVGElements.value)
     {
         case 'square' : 
@@ -184,6 +198,10 @@ function BtnAddElementClickCallback()
             let textPrintType = (inputTextRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
             addNewText(inputTextFontSize.value, selectTextFontFamily.value, inputTextContent.value, 0,0,textPrintType);
             break;
+        case 'path' :
+            let pathPrintType = (inputPathRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE)
+            addNewPath(inputPathContent.value, null, null, pathPrintType);
+            break;    
         default:
             break;
     }
@@ -301,6 +319,8 @@ function bindEventListener()
     inputSquareRadioCutting.addEventListener('change', InputSquareRadioPrintTypeChangeCallback);
     inputTextRadioEngrave.addEventListener('change', InputTextRadioPrintTypeChangeCallback);
     inputTextRadioCutting.addEventListener('change', InputTextRadioPrintTypeChangeCallback);
+    inputPathRadioEngrave.addEventListener('change', InputPathRadioPrintTypeChangeCallback);
+    inputPathRadioCutting.addEventListener('change', InputPathRadioPrintTypeChangeCallback);
     inputTextFontSize.addEventListener('change', InputTextFontSizeChangeCallback);
     inputTextContent.addEventListener('change', InputTextContentChangeCallback);
     inputGridCellSize.addEventListener('change', InputGridCellSizeChangeCallback);
@@ -369,6 +389,9 @@ function showMenu(menuName)
         case "text" : 
             textMenuContainer.style.display = 'block';
             break;
+        case "path" :
+            pathMenuContainer.style.display = 'block';
+            break;    
         default: 
             // Remove the add buttons by default.
             btnAddElement.style.display = 'none';
@@ -383,6 +406,7 @@ function hideMenus()
 {
     squareMenuContainer.style.display = 'none';
     textMenuContainer.style.display = 'none';
+    pathMenuContainer.style.display = 'none';
 }
 
 function removeGrid()
@@ -473,12 +497,22 @@ function addNewSquare(squareSideLength, squareColor, squarePosX = 20, squarePosY
     btnDeleteAllElements.style.display = 'block';
 }
 
-function addNewText(textFontSize, textFontFamily, textContent, textPosX = 20, textPosY = 20, printType = PrintType.NO_TYPE)
+function addNewText(textFontSize, textFontFamily, textContent, textPosX = 20, textPosY = 20, printType = PrintType.NO_TYPE, pathContent)
 {
     let text = new TextSVG(mainCanvas, canvasContainer.getBoundingClientRect(), inputCanvasWidth.value, inputCanvasHeight.value, textFontSize, textContent, textFontFamily, textPosX, textPosY, 'yellow', printType);
     text.SVGElement.move(textPosX, textPosY);
     bindShapeListener(text);
     listOfShape.push(text);
+    btnDeleteAllElements.style.display = 'block';
+}
+
+function addNewPath(pathContent, pathPosX = 50, pathPosY = 50, printType = PrintType.NO_TYPE)
+{
+    let path = new Path(mainCanvas, canvasContainer.getBoundingClientRect(), inputCanvasWidth.value, inputCanvasHeight.value, 50, 50, pathPosX, pathPosY, 'yellow', printType, pathContent);
+    path.width = 100;
+    path.height = 100;
+    bindShapeListener(path);
+    listOfShape.push(path);
     btnDeleteAllElements.style.display = 'block';
 }
 

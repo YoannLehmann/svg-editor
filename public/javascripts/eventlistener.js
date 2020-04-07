@@ -504,7 +504,8 @@ function fillCanvasWithSquares()
         }
         for(let j = 0; j < verticalLineCount; j++)
         {
-            addNewSquare(squareSideLength, squareColor, i * (squareSideLength + elementSpacing), j * (squareSideLength + elementSpacing));
+            let squarePrintType = (inputSquareRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
+            addNewSquare(squareSideLength, squareColor, i * (squareSideLength + elementSpacing), j * (squareSideLength + elementSpacing), squarePrintType);
         }
     }
 }
@@ -532,7 +533,8 @@ function fillCanvasWithText()
         }
         for(let j = 0; j < verticalLineCount; j++)
         {
-            addNewText(textFontSize, textFontFamily, textContent, i * (textFontSize + elementSpacing), j * (textFontSize + elementSpacing));
+            let textPrintType = (inputTextRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
+            addNewText(textFontSize, textFontFamily, textContent, i * (textFontSize + elementSpacing), j * (textFontSize + elementSpacing), textPrintType);
         }
     }
     

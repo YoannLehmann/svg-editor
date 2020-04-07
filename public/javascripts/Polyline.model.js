@@ -5,36 +5,11 @@ class Polyline extends Shape {
         this.SVGElement = container.polyline(polylineContent);
         this.SVGElement.x(this.xPos);
         this.SVGElement.y(this.yPos);
-        this.changePrintType(printType);
+        
         this.updateAttr();
+        super.setPrintType(printType);
     }
 
-    changePrintType(newPrintType)
-    {
-        this.printType = newPrintType;
-
-        if(this.printType === PrintType.CUTTING)
-        {
-            this.SVGElement.attr({
-                'fill-opacity' : 0
-            });
-            this.SVGElement.stroke({
-                color: 'red',
-                width: 1
-            });
-        }
-        else if(this.printType === PrintType.ENGRAVE)
-        {
-            this.color = 'black';
-            this.SVGElement.attr({
-                'fill-opacity' : 1
-            });
-            this.SVGElement.stroke({
-                color: 'red',
-                width: 0
-            });
-        }
-    }
 
     updateAttr()
     {

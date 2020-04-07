@@ -26,6 +26,7 @@ class Shape
 
     OnMouseDownCallback(event)
     {
+        console.log("Mouse down event called");
         this.Select();
 
         let containerXPos = this.containerBoundingRect.left;
@@ -107,7 +108,7 @@ class Shape
         this.containerHeight = newContainerHeight;
     }
 
-    changePrintType(newPrintType)
+    setPrintType(newPrintType)
     {
         this.printType = newPrintType;
 
@@ -137,5 +138,23 @@ class Shape
     getPrintType()
     {
         return this.printType;
+    }
+
+    setWidth(newWidth)
+    {
+        this.width = newWidth;
+
+        this.SVGElement.attr({
+            width: newWidth
+        });
+    }
+
+    setHeight(newHeight)
+    {
+        this.height = newHeight;
+
+        this.SVGElement.attr({
+            height: newHeight
+        });
     }
 }

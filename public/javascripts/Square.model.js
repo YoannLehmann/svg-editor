@@ -12,17 +12,7 @@ class Square extends Shape
             fill: 'black'
         });
         this.updateAttr();
-        super.changePrintType(printType);
-    }
-
-    changeSideLength(newSideLength)
-    {
-        this.width = newSideLength;
-        this.height = newSideLength;
-        this.SVGElement.attr({
-            width: this.width,
-            height: this.height
-        });
+        super.setPrintType(printType);
     }
 
     updateAttr()

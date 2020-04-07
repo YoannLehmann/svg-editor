@@ -12,39 +12,13 @@ class TextSVG extends Shape
         });
         this.SVGElement.x(xPos);
         this.SVGElement.y(yPos);
-        this.changeFontSize(fontSize);
-        this.changeFontFamily(fontFamily);
-        this.changePrintType(printType);
+        this.setFontSize(fontSize);
+        this.setFontFamily(fontFamily);
+        super.setPrintType(printType);
         this.updateAttr();
     }
 
-    changePrintType(newPrintType)
-    {
-        this.printType = newPrintType;
-        if(this.printType === PrintType.CUTTING)
-        {
-            this.SVGElement.attr({
-                'fill-opacity' : 0
-            });
-            this.SVGElement.stroke({
-                color: 'red',
-                width: 1
-            });
-        }
-        else if(this.printType === PrintType.ENGRAVE)
-        {
-            this.color = 'black';
-            this.SVGElement.attr({
-                'fill-opacity' : 1
-            });
-            this.SVGElement.stroke({
-                color: 'red',
-                width: 0
-            });
-        }
-    }
-
-    changeFontSize(newFontSize)
+    setFontSize(newFontSize)
     {
         this.fontSize = newFontSize;
         this.SVGElement.font({
@@ -57,7 +31,7 @@ class TextSVG extends Shape
         }
     }
 
-    changeFontFamily(newFontFamily)
+    setFontFamily(newFontFamily)
     {
         this.fontFamily = newFontFamily;
         this.SVGElement.font({
@@ -65,7 +39,7 @@ class TextSVG extends Shape
         });
     }
 
-    changeTextContent(newTextContent)
+    setTextContent(newTextContent)
     {
         this.textContent = newTextContent;
         this.SVGElement.plain(this.textContent);

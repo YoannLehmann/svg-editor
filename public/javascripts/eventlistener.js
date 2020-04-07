@@ -83,7 +83,7 @@ function SelectTextFontFamilyChangeCallback(event)
     
     if(selectedShape !== null && selectedShape.type === 'text')
     {
-        selectedShape.changeFontFamily(selectTextFontFamily.value);
+        selectedShape.setFontFamily(selectTextFontFamily.value);
         console.log(selectedShape);
     }
 }
@@ -139,7 +139,8 @@ function InputSquareSideChangeCallback(event)
 {
     if(selectedShape !== null && selectedShape.type === 'square')
     {
-        selectedShape.changeSideLength(inputSquareSide.value);
+        selectedShape.setWidth(inputSquareSide.value);
+        selectedShape.setHeight(inputSquareSide.value);
     }
 }
 
@@ -155,7 +156,7 @@ function InputTextFontSizeChangeCallback(event)
 {
     if(selectedShape !== null && selectedShape.type === 'text')
     {
-        selectedShape.changeFontSize(inputTextFontSize.value);
+        selectedShape.setFontSize(inputTextFontSize.value);
     }
 }
 
@@ -163,7 +164,7 @@ function InputTextContentChangeCallback(event)
 {
     if(selectedShape !== null && selectedShape.type === 'text')
     {
-        selectedShape.changeTextContent(inputTextContent.value);
+        selectedShape.setTextContent(inputTextContent.value);
     }
 }
 
@@ -172,7 +173,7 @@ function InputSquareRadioPrintTypeChangeCallback(event)
     if(selectedShape !== null && selectedShape.type === 'square')
     {
         let printType = (inputSquareRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
-        selectedShape.changePrintType(printType);
+        selectedShape.setPrintType(printType);
     }
 }
 
@@ -181,7 +182,7 @@ function InputTextRadioPrintTypeChangeCallback(event)
     if(selectedShape !== null && selectedShape.type === 'text')
     {
         let printType = (inputTextRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
-        selectedShape.changePrintType(printType);
+        selectedShape.setPrintType(printType);
     }
 }
 
@@ -190,7 +191,7 @@ function InputPathRadioPrintTypeChangeCallback(event)
     if(selectedShape !== null && selectedShape.type === 'path')
     {
         let printType = (inputPathRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
-        selectedShape.changePrintType(printType);
+        selectedShape.setPrintType(printType);
     }
 }
 
@@ -199,7 +200,7 @@ function InputPolylineRadioPrintTypeChangeCallback(event)
     if(selectedShape !== null && selectedShape.type === 'polyline')
     {
         let printType = (inputPolylineRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
-        selectedShape.changePrintType(printType);
+        selectedShape.setPrintType(printType);
     }
 }
 
@@ -320,6 +321,20 @@ function CanvasBackgroundClickCallback(event)
     UnselectAllElement();
 }
 
+// Use to prevent the shape to stop moving when the mouse is not over the shape and pressed.
+function CanvasBackgroundMousemoveCallback(event)
+{
+    for(let i = 0; i < listOfShape.length; i++)
+    {
+        let shape = listOfShape[i];
+        console.log("Moving " + shape.mousePressed);
+        if(shape.mousePressed)
+        {
+            shape.OnMouseMoveCallback(event);
+        }
+    }
+}
+
 function ShapeClickCallback(event, shape)
 {
     hideMenus();
@@ -361,6 +376,7 @@ function bindEventListener()
     selectSVGElements.addEventListener('change', SelectSVGElementsChangeCallback);
     selectTextFontFamily.addEventListener('change', SelectTextFontFamilyChangeCallback);
     canvasBackground.on(['click'], CanvasBackgroundClickCallback);
+    canvasBackground.on(['mousemove'], CanvasBackgroundMousemoveCallback);
 }
 
 function initImportedFile()
@@ -681,10 +697,13 @@ function updateMenuWithShape(shape)
         case 'path' :
             pathTitle.innerText = 'Menu du tracé (élément sélectionné)';
             selectSVGElements.value = 'path';
+            (shape.getPrintType() === 'cutting' ? inputPathRadioCutting.checked = 'checked' : inputPathRadioEngrave.checked = 'checked')
+            
             break;
         case 'polyline':
             polylineTitle.innerText = 'Menu de la polyligne (élément sélectionné)';
             selectSVGElements.value = 'polyline';
+            (shape.getPrintType() === 'cutting' ? inputPolylineRadioCutting.checked = 'checked' : inputPolylineRadioEngrave.checked = 'checked')
             break;
         default : 
 

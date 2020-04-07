@@ -1,8 +1,8 @@
-class Path extends Shape {
-    constructor(container, containerBoundingRect, containerWidth, containerHeight, width, height, xPos, yPos, color, printType = PrintType.NO_TYPE, pathContent)
+class Polyline extends Shape {
+    constructor(container, containerBoundingRect, containerWidth, containerHeight, width, height, xPos, yPos, color, printType = PrintType.NO_TYPE, polylineContent)
     {
         super(container, containerBoundingRect, containerWidth, containerHeight, width, height, xPos, yPos, color, 'path', printType);
-        this.SVGElement = container.path(pathContent);
+        this.SVGElement = container.polyline(polylineContent);
         this.SVGElement.x(this.xPos);
         this.SVGElement.y(this.yPos);
         this.changePrintType(printType);
@@ -39,9 +39,8 @@ class Path extends Shape {
     updateAttr()
     {
         super.updateAttr();
-
         this.SVGElement.attr({
-            'path-content' : this.pathContent
+            'polyline-content' : this.polylineContent
         });
     }
 }

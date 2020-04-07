@@ -19,7 +19,10 @@ let inputTextRadioEngrave = document.getElementById('radio-text-engrave');
 let inputPathRadioCutting = document.getElementById('radio-path-cutting');
 let inputPathRadioEngrave = document.getElementById('radio-path-engrave');
 let inputPathContent = document.getElementById('input-path-content');
-
+// ----- POLYLINE MENU --------
+let inputPolylineRadioCutting = document.getElementById('radio-polyline-cutting');
+let inputPolylineRadioEngrave = document.getElementById('radio-polyline-engrave');
+let inputPolylineContent = document.getElementById('input-polyline-content');
 // **** CANVAS MENU ****
 let inputGridCellSize = document.getElementById('input-grid-cell-size')
 let inputCanvasWidth = document.getElementById('input-canvas-width');
@@ -32,6 +35,7 @@ let canvasContainer = document.getElementById('canvas-container');
 let squareMenuContainer = document.getElementById('square-menu');
 let textMenuContainer = document.getElementById('text-menu');
 let pathMenuContainer = document.getElementById('path-menu');
+let polylineMenuContainer = document.getElementById('polyline-menu');
 let canvasBackground = null;
 let mainCanvas = null;
 // **** EXPORT/IMPORT MENU ****
@@ -186,6 +190,15 @@ function InputPathRadioPrintTypeChangeCallback(event)
     }
 }
 
+function InputPolylineRadioPrintTypeChangeCallback(event)
+{
+    if(selectedShape !== null && selectedShape.type === 'polyline')
+    {
+        let printType = (inputPolylineRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
+        selectedShape.changePrintType(printType);
+    }
+}
+
 function BtnAddElementClickCallback()
 {
     switch(selectSVGElements.value)
@@ -202,6 +215,10 @@ function BtnAddElementClickCallback()
             let pathPrintType = (inputPathRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE)
             addNewPath(inputPathContent.value, null, null, pathPrintType);
             break;    
+        case 'polyline' : 
+            let polylinePrintType = (inputPolylineRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE)
+            addNewPolyline(inputPolylineContent.value, null, null, polylinePrintType);
+            break;
         default:
             break;
     }
@@ -329,6 +346,8 @@ function bindEventListener()
     inputTextRadioCutting.addEventListener('change', InputTextRadioPrintTypeChangeCallback);
     inputPathRadioEngrave.addEventListener('change', InputPathRadioPrintTypeChangeCallback);
     inputPathRadioCutting.addEventListener('change', InputPathRadioPrintTypeChangeCallback);
+    inputPolylineRadioEngrave.addEventListener('change', InputPolylineRadioPrintTypeChangeCallback);
+    inputPolylineRadioCutting.addEventListener('change', InputPolylineRadioPrintTypeChangeCallback);
     inputTextFontSize.addEventListener('change', InputTextFontSizeChangeCallback);
     inputTextContent.addEventListener('change', InputTextContentChangeCallback);
     inputGridCellSize.addEventListener('change', InputGridCellSizeChangeCallback);
@@ -422,7 +441,10 @@ function showMenu(menuName)
             break;
         case "path" :
             pathMenuContainer.style.display = 'block';
-            break;    
+            break;
+        case "polyline" :
+            polylineMenuContainer.style.display = 'block';  
+            break;      
         default: 
             // Remove the add buttons by default.
             btnAddElement.style.display = 'none';
@@ -438,6 +460,7 @@ function hideMenus()
     squareMenuContainer.style.display = 'none';
     textMenuContainer.style.display = 'none';
     pathMenuContainer.style.display = 'none';
+    polylineMenuContainer.style.display = 'none';
 }
 
 function removeGrid()
@@ -539,12 +562,21 @@ function addNewText(textFontSize, textFontFamily, textContent, textPosX = 20, te
 
 function addNewPath(pathContent, pathPosX = 50, pathPosY = 50, printType = PrintType.NO_TYPE)
 {
-    console.log("Add new path" + pathContent);
     let path = new Path(mainCanvas, canvasContainer.getBoundingClientRect(), inputCanvasWidth.value, inputCanvasHeight.value, 50, 50, pathPosX, pathPosY, 'yellow', printType, pathContent);
     path.width = 100;
     path.height = 100;
     bindShapeListener(path);
     listOfShape.push(path);
+    btnDeleteAllElements.style.display = 'block';
+}
+
+function addNewPolyline(polylineContent, polylinePosX = 50, polylinePosY = 50, printType = PrintType.NO_TYPE)
+{
+    let polyline = new Polyline(mainCanvas, canvasContainer.getBoundingClientRect(), inputCanvasWidth.value, inputCanvasHeight.value, 50, 50, polylinePosX, polylinePosY, 'yellow', printType, polylineContent);
+    polyline.width = 100;
+    polyline.height = 100;
+    bindShapeListener(polyline);
+    listOfShape.push(polyline);
     btnDeleteAllElements.style.display = 'block';
 }
 

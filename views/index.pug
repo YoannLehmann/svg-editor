@@ -21,7 +21,31 @@ block content
               option(value="square") Carré
               option(value="text") Texte
               option(value="path") Tracé
+              option(value="polyline") Polyligne
+        div(id='polyline-menu' style='display: none;')
+          div(class='row')
+            h3 Menu de la polyligne
+          div(class='row')
+            div(class='col-1')
+            div(class='col-5 pl-0')
+              label(for='radio-polyline-cutting') Découper
+            div(class='col-5')
+              input(type='radio' id='radio-polyline-cutting' name='polyline-print-type' value='cutting' checked)
+          div(class='row')
+            div(class='col-1')
+            div(class='col-5 pl-0')
+              label(for='radio-polyline-engrave') Graver
+            div(class='col-5')
+              input(type='radio' id='radio-polyline-engrave' name='polyline-print-type' value='engrave') 
+          div(class='row')
+            div(class='col-1')
+            div(class='col-5 pl-0')
+              label(for="input-polyline-content") Contenu de la polyligne
+            div(class='col-5 pl-0')
+              input(type='text' class='input-group-text' name='input-polyline-content' id='input-polyline-content')      
         div(id='path-menu' style='display: none;')
+          div(class='row')
+            h3 Menu du tracé
           div(class='row')
             div(class='col-1')
             div(class='col-5 pl-0')
@@ -104,12 +128,12 @@ block content
               input(type='radio' id='radio-text-engrave' name='text-print-type' value='engrave')  
         div(class='row')
           div(class='col-1')
-          div(class='col-10 p-0') 
-            button(class='btn btn-primary' id='btn-fill-canvas' style='display: none;') Remplir la zone de cet élément
-        div(class='row mt-1')
-          div(class='col-1')
           div(class='col-10 p-0')
             button(class='btn btn-primary' id='btn-add-element'  style='display: none;') Ajouter un élément
+        div(class='row mt-1')
+          div(class='col-1')
+          div(class='col-10 p-0') 
+            button(class='btn btn-primary' id='btn-fill-canvas' style='display: none;') Remplir la zone de cet élément
         div(class='row mt-1')
           div(class='col-1')
           div(class='col-10 p-0')

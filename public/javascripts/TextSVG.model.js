@@ -15,6 +15,7 @@ class TextSVG extends Shape
         this.changeFontSize(fontSize);
         this.changeFontFamily(fontFamily);
         this.changePrintType(printType);
+        this.updateAttr();
     }
 
     changePrintType(newPrintType)
@@ -68,5 +69,14 @@ class TextSVG extends Shape
     {
         this.textContent = newTextContent;
         this.SVGElement.plain(this.textContent);
+    }
+
+    updateAttr()
+    {
+        super.updateAttr();
+        this.SVGElement.attr({
+            'font-family' : this.fontFamily,
+            'font-size' : this.fontSize,
+        });
     }
 }

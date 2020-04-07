@@ -74,6 +74,7 @@ class Shape
             
             
         }
+        this.updateAttr();
     }
 
     OnClickCallback(event)
@@ -89,5 +90,15 @@ class Shape
     Unselect()
     {
         this.SVGElement.css('opacity', '1');
+    }
+
+    updateAttr()
+    {
+        this.SVGElement.attr({
+            'width' : this.width,
+            'height' : this.height,
+            'color' : this.color,
+            'print-type' : this.printType
+        });
     }
 }

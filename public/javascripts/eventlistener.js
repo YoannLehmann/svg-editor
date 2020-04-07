@@ -32,12 +32,14 @@ let mainCanvas = null;
 let inputImportSVGFile = document.getElementById('input-import-svg-file');
 let btnExportCanvas = document.getElementById('btn-export');
 let btnPrint = document.getElementById('btn-print');
+let btnImport = document.getElementById('btn-import');
 // **** VARIABLES ****
 let mousePressed = false;
 let gridActive = false;
 let selectedShape = null;
 let listOfShape = [];
 let listOfGridLine = [];
+let importFileContent = null;
 
 // Initialisation.
 window.onload = function(event)
@@ -97,6 +99,8 @@ function InputSVGFileChangeCallback(event)
         reader.readAsText(file, "UTF-8");
         reader.onload = function (evt) {
             console.log(evt.target.result);
+            importFileContent = evt.target.result;
+            (importFileContent !== null ? btnImport.style.display = 'block' : btnImport.style.display = 'none') 
         }
         reader.onerror = function (evt) {
             console.log("error reading file");
@@ -156,6 +160,7 @@ function InputTextRadioPrintTypeChangeCallback(event)
 
 function BtnAddElementClickCallback()
 {
+    console.log("add element click");
     switch(selectSVGElements.value)
     {
         case 'square' : 
@@ -227,6 +232,62 @@ function BtnPrintCanvasClickCallback(event)
     printCanvas();
 }
 
+function BtnImportClickCallback(event)
+{
+    if(importFileContent !== null)
+    {
+        var svgHTML = new DOMParser().parseFromString(importFileContent, "text/xml");
+        console.log(svgHTML);
+        // Test if first child is a comment.
+        let svgContent = svgHTML.firstChild;
+        //console.log(svgHTML.childNodes[1]);
+        //console.log(svgHTML.childNodes[2]);
+        //(typeof svgContent === 'object' ? svgContent = svgHTML.childNodes[2] : null)
+        svgContent.id = 'main-canvas';
+        //console.log(svgContent);
+        mainCanvas.remove();
+        importFileContent = svgContent;
+        //canvasContainer.appendChild(svgContent);
+        //mainCanvas.svg(svgContent);
+        //mainCanvas = document.getElementById('main-canvas');
+        initImportedFile();
+    }
+
+}
+
+function initImportedFile()
+{
+    mainCanvas = SVG().addTo('#canvas-container').size(inputCanvasWidth.value, inputCanvasHeight.value);
+    mainCanvas.attr({
+        'id': 'main-canvas',
+        'max-width' : '630px'
+    });
+    canvasBackground = mainCanvas.rect(inputCanvasWidth.value,inputCanvasHeight.value).attr({fill:'#ddd'});
+    /*
+    mainCanvas = SVG().addTo('#canvas-container').size(inputCanvasWidth.value, inputCanvasHeight.value);
+    mainCanvas.attr({
+        'id': 'main-canvas',
+        'max-width' : '630px'
+    });
+    canvasBackground = mainCanvas.rect(inputCanvasWidth.value,inputCanvasHeight.value).attr({fill:'#ddd'});
+    */
+
+    for(let i = 0; i < importFileContent.childNodes.length; i++)
+    {
+        let node = importFileContent.childNodes[i];
+        console.log(node.nodeName);
+        switch(node.nodeName)
+        {
+            case 'text' : 
+                addNewText(node.getAttribute('font-size'), node.getAttribute('font-family'), node.textContent, parseInt(node.getAttribute('x')), parseInt(node.getAttribute('y')), node.getAttribute('print-type'));
+                break;
+            case 'rect' :
+                break;
+        }
+    }
+    bindEventListener();
+}
+
 function CanvasBackgroundClickCallback(event)
 {
     UnselectAllElement();
@@ -253,6 +314,7 @@ function bindEventListener()
     btnDeleteAllElements.addEventListener('click', BtnDeleteAllElementsClickCallback);
     btnExportCanvas.addEventListener('click', BtnExportCanvasClickCallback);
     btnPrint.addEventListener('click', BtnPrintCanvasClickCallback);
+    btnImport.addEventListener('click', BtnImportClickCallback);
     inputSquareSide.addEventListener('change', InputSquareSideChangeCallback);
     inputSquareColor.addEventListener('change', InputSquareColorChangeCallback);
     inputSquareRadioEngrave.addEventListener('change', InputSquareRadioPrintTypeChangeCallback);

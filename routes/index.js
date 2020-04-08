@@ -6,7 +6,7 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { 
-    title: 'SVG Editor',
+    title: 'Éditeur SVG',
     description: 'This is a nice description of the editor!' ,
     canvasWidth: '1000',
     canvasHeight: '800'

@@ -269,13 +269,27 @@ function BtnFillCanvasClickCallback(event)
 
 function BtnDeleteElementClickCallback(event)
 {
+    console.log("Avant suppression : ");
+    console.log(listOfShape);
     if(selectedShape !== null)
     {
+        let shapeIndex = 0;
+        for(let i = 0; i < listOfShape.length; i++)
+        {
+            if(listOfShape[i] === selectedShape)
+            {
+                shapeIndex = i;
+            }
+        }
+        selectedShape.Unselect();
         selectedShape.SVGElement.remove();
-        UnselectAllElement();
+        listOfShape.splice(shapeIndex);
     }
 
-    (listOfShape.length > 0 ? btnDeleteAllElements.style.display = 'block' : btnDeleteAllElements.style.display = 'none')
+    console.log("Après suppression");
+    console.log(listOfShape);
+    btnDeleteElement.style.display = 'none';
+    (listOfShape && listOfShape.length ? null : btnDeleteAllElements.style.display = 'none');
 }
 
 function BtnDeleteAllElementsClickCallback(event)
@@ -285,6 +299,7 @@ function BtnDeleteAllElementsClickCallback(event)
     {
         listOfShape[i].SVGElement.remove();
     }
+    listOfShape = [];
     btnDeleteAllElements.style.display = 'none';
 }
 
@@ -430,9 +445,10 @@ function initImportedFile()
     canvasBackground = mainCanvas.rect(inputCanvasWidth.value,inputCanvasHeight.value).attr({
         fill:'#ddd',
         id: 'canvas-background',
-        width: 500,
-        height: 400
+        width: inputCanvasWidth.value,
+        height: inputCanvasHeight.value
     });
+
     bindEventListener();
     let canvasWidth = 0;
     let canvasHeight = 0;
@@ -486,13 +502,7 @@ function initImportedFile()
             }
         }
     }
-    const e = new Event("change");
-    /*
-    inputCanvasWidth.value = canvasWidth;
-    inputCanvasWidth.dispatchEvent(e);
-    inputCanvasHeight.value = canvasHeight;
-    inputCanvasHeight.dispatchEvent(e);
-    */
+    console.log(listOfShape);
 }
 
 function showMenuContainer(menuName)

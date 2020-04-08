@@ -1,16 +1,21 @@
 extends layout
 
 block content
-  div(class='container')
+  div(class='container pl-0 pr-0' width=1000 max-width=1000 min-width=1000)
     div(class='row')
-      h1 #{title}
-    div(class='row')  
-      div(class='col-3 mb-2 pl-0 pr-0')
-        button(id='btn-show-menu' class='btn btn-primary') Afficher le menu
+      div(class='col-6 pl-0 pr-0')
+        div(class='row')
+          h1 #{title}
+        div(class='row')
+          div(class='col-6 pl-0 pr-0 mb-2')
+            button(id='btn-show-menu' class='btn btn-primary') Afficher le menu
+      div(class='col-6 pl-0 pr-0')
+        div(class='row')
+          img(src='/images/logo-HEP-BEJUNE.png' id='img-logo-hep')
     div(class='row')
       div(class='col-12 pl-0 pr-0' )
         div(id="canvas-container" )
-      div(class='col-4' id='menu-container' style='display: none;')
+      div(class='col-4 pl-0 pr-0' id='menu-container' style='display: none;')
         div(class='row')
           h2 Menu SVG
           img(class='arrow' id='img-menu-svg-arrow' menu-show='false' menu='menu-svg' src='/images/right-arrow.png')

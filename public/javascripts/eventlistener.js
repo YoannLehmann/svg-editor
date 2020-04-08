@@ -3,7 +3,9 @@ let btnFillCanvas = document.getElementById('btn-fill-canvas');
 let btnDeleteElement = document.getElementById('btn-delete-element');
 let btnAddElement = document.getElementById('btn-add-element');
 let btnDeleteAllElements = document.getElementById('btn-delete-all-elements')
+let btnSelectAllElements = document.getElementById('btn-select-all-elements');
 let selectSVGElements = document.getElementById('select-svg-elements'); 
+let imgMenuSvgArrow = document.getElementById('img-menu-svg-arrow');
 // ------ SQUARE MENU ------
 let squareTitle = document.getElementById('square-title');
 let inputSquareSide = document.getElementById('input-square-side');
@@ -34,12 +36,19 @@ let inputCanvasHeight = document.getElementById('input-canvas-height');
 let labelGridCellSize = document.getElementById('label-grid-cell-size');
 let btnAddGrid = document.getElementById('btn-add-grid');
 let btnRemoveGrid = document.getElementById('btn-remove-grid');
+let imgMenuCanvasArrow = document.getElementById('img-menu-canvas-arrow');
+let imgMenuGridArrow = document.getElementById('img-menu-grid-arrow');
 // **** CONTAINERS ****
 let canvasContainer = document.getElementById('canvas-container');
-let squareMenuContainer = document.getElementById('square-menu');
-let textMenuContainer = document.getElementById('text-menu');
-let pathMenuContainer = document.getElementById('path-menu');
-let polylineMenuContainer = document.getElementById('polyline-menu');
+let squareMenuContainer = document.getElementById('square-menu-container');
+let textMenuContainer = document.getElementById('text-menu-container');
+let pathMenuContainer = document.getElementById('path-menu-container');
+let svgMenuContainer = document.getElementById('svg-menu-container');
+let canvasMenuContainer = document.getElementById('canvas-menu-container');
+let gridMenuContainer = document.getElementById('grid-menu-container');
+let fileMenuContainer = document.getElementById('file-menu-container');
+
+let polylineMenuContainer = document.getElementById('polyline-menu-container');
 let canvasBackground = null;
 let mainCanvas = null;
 // **** EXPORT/IMPORT MENU ****
@@ -47,6 +56,7 @@ let inputImportSVGFile = document.getElementById('input-import-svg-file');
 let btnExportCanvas = document.getElementById('btn-export');
 let btnPrint = document.getElementById('btn-print');
 let btnImport = document.getElementById('btn-import');
+let imgMenuFileArrow = document.getElementById('img-menu-file-arrow');
 // **** VARIABLES ****
 let mousePressed = false;
 let gridActive = false;
@@ -335,6 +345,11 @@ function CanvasBackgroundMousemoveCallback(event)
     }
 }
 
+function CanvasBackgroundMouseupCallback(event)
+{
+    UnselectAllElement();
+}
+
 function ShapeClickCallback(event, shape)
 {
     hideMenus();
@@ -343,6 +358,16 @@ function ShapeClickCallback(event, shape)
     updateMenuWithShape(shape);
     btnDeleteElement.style.display = 'block';
     btnDeleteAllElements.style.display = 'block';
+}
+
+function ImgMenuArrowCallback(event)
+{
+    let menuType = this.getAttribute('menu');
+    let menuShow = (this.getAttribute('menu-show') === 'true' ?  true : false);
+    (menuShow ? this.setAttribute('src', '/images/right-arrow.png') : this.setAttribute('src', '/images/down-arrow.png'));
+    (menuShow ? this.setAttribute('menu-show', 'false') : this.setAttribute('menu-show', 'true'));
+    (menuShow ? hideMenuContainer(menuType) : showMenuContainer(menuType));
+    this.setAttribute('menu-show', !menuShow);
 }
 
 // Functions
@@ -377,6 +402,11 @@ function bindEventListener()
     selectTextFontFamily.addEventListener('change', SelectTextFontFamilyChangeCallback);
     canvasBackground.on(['click'], CanvasBackgroundClickCallback);
     canvasBackground.on(['mousemove'], CanvasBackgroundMousemoveCallback);
+    canvasBackground.on(['mouseup'], CanvasBackgroundMouseupCallback);
+    imgMenuSvgArrow.addEventListener('click', ImgMenuArrowCallback);
+    imgMenuCanvasArrow.addEventListener('click', ImgMenuArrowCallback);
+    imgMenuGridArrow.addEventListener('click', ImgMenuArrowCallback);
+    imgMenuFileArrow.addEventListener('click', ImgMenuArrowCallback);
 }
 
 function initImportedFile()
@@ -452,6 +482,44 @@ function initImportedFile()
     inputCanvasHeight.value = canvasHeight;
     inputCanvasHeight.dispatchEvent(e);
     */
+}
+
+function showMenuContainer(menuName)
+{
+    switch(menuName)
+    {
+        case 'menu-svg':
+            svgMenuContainer.style.display = 'block';
+            break;
+        case 'menu-canvas':
+            canvasMenuContainer.style.display = 'block';
+            break;
+        case 'menu-grid' :
+            gridMenuContainer.style.display = 'block';
+            break;
+        case 'menu-file' : 
+            fileMenuContainer.style.display = 'block';
+            break;
+    }
+}
+
+function hideMenuContainer(menuName)
+{
+    switch(menuName)
+    {
+        case 'menu-svg':
+            svgMenuContainer.style.display = 'none';
+            break;
+        case 'menu-canvas':
+            canvasMenuContainer.style.display = 'none';
+            break;
+        case 'menu-grid' :
+            gridMenuContainer.style.display = 'none';
+            break;
+        case 'menu-file' : 
+            fileMenuContainer.style.display = 'none';
+            break;
+    }
 }
 
 function showMenu(menuName)

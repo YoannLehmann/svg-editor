@@ -12,174 +12,193 @@ block content
       div(class='col-4' id='menu-container')
         div(class='row')
           h2 Menu SVG
-        div(class='row' id='svg-menu-content')
-          div(class='col-5')
-            label Sélectionner l'élément à ajouter 
-          div(class='col-5')
-            select(id="select-svg-elements" name="select-svg-elements")
-              option(value="0") Choisir un élément
-              option(value="square") Carré
-              option(value="text") Texte
-              option(value="path") Tracé
-              option(value="polyline") Polyligne
-        div(id='polyline-menu' style='display: none;')
+          img(class='arrow' id='img-menu-svg-arrow' menu-show='false' menu='menu-svg' src='/images/right-arrow.png')
+        div(id='svg-menu-container' style='display: none;')
           div(class='row')
-            h3(id='polyline-title') Menu de la polyligne
-          div(class='row')
-            div(class='col-1')
-            div(class='col-5 pl-0')
-              label(for='radio-polyline-cutting') Découper
             div(class='col-5')
-              input(type='radio' id='radio-polyline-cutting' name='polyline-print-type' value='cutting' checked)
-          div(class='row')
-            div(class='col-1')
-            div(class='col-5 pl-0')
-              label(for='radio-polyline-engrave') Graver
+              label Sélectionner l'élément à ajouter 
             div(class='col-5')
-              input(type='radio' id='radio-polyline-engrave' name='polyline-print-type' value='engrave') 
+              select(id="select-svg-elements" name="select-svg-elements")
+                option(value="0") Choisir un élément
+                option(value="square") Carré
+                option(value="text") Texte
+                option(value="path") Tracé
+                option(value="polyline") Polyligne
+          div(class='row mt-2')
+            div(class='col-12')
+              button(class='btn btn-primary' id='btn-select-all-elements') Sélectionner tous les éléments 
+          div(id='polyline-menu-container' style='display: none;')
+            div(class='row')
+              h3(id='polyline-title') Menu de la polyligne
+            div(class='row')
+              div(class='col-1')
+              div(class='col-5 pl-0')
+                label(for='radio-polyline-cutting') Découper
+              div(class='col-5')
+                input(type='radio' id='radio-polyline-cutting' name='polyline-print-type' value='cutting' checked)
+            div(class='row')
+              div(class='col-1')
+              div(class='col-5 pl-0')
+                label(for='radio-polyline-engrave') Graver
+              div(class='col-5')
+                input(type='radio' id='radio-polyline-engrave' name='polyline-print-type' value='engrave') 
+            div(class='row')
+              div(class='col-1')
+              div(class='col-5 pl-0')
+                label(for="input-polyline-content") Contenu de la polyligne
+              div(class='col-5 pl-0')
+                input(type='text' class='input-group-text' name='input-polyline-content' id='input-polyline-content')      
+          div(id='path-menu-container' style='display: none;')
+            div(class='row')
+              h3(id='path-title') Menu du tracé
+            div(class='row')
+              div(class='col-1')
+              div(class='col-5 pl-0')
+                label(for='radio-path-cutting') Découper
+              div(class='col-5')
+                input(type='radio' id='radio-path-cutting' name='path-print-type' value='cutting' checked)
+            div(class='row')
+              div(class='col-1')
+              div(class='col-5 pl-0')
+                label(for='radio-path-engrave') Graver
+              div(class='col-5')
+                input(type='radio' id='radio-path-engrave' name='path-print-type' value='engrave') 
+            div(class='row')
+              div(class='col-1')
+              div(class='col-5 pl-0')
+                label(for="input-path-content") Contenu du tracé
+              div(class='col-5 pl-0')
+                input(type='text' class='input-group-text' name='input-path-content' id='input-path-content')  
+          div(id='square-menu-container' style='display: none')
+            div(class='row')
+              h3(id='square-title') Menu du carré
+            div(class='row')  
+              div(class='col-1')
+              div(class='col-5 pl-0')
+                label(for="input-square-side") Taille du côté
+              div(class='col-5')
+                input(type="number" class='input-group-text' min=5 max=200 value='50' name='input-square-side' id='input-square-side')
+            div(class='row')
+              div(class='col-1')
+              div(class='col-5 pl-0')
+                label(for='input-square-color') Couleur du carré
+              div(class='col-5')
+                input(class='jscolor' id="input-square-color" value="ab2567")
+            div(class='row')
+              div(class='col-1')
+              div(class='col-5 pl-0')
+                label(for='radio-square-cutting') Découper
+              div(class='col-5')
+                input(type='radio' id='radio-square-cutting' name='square-print-type' value='cutting' checked)
+            div(class='row')
+              div(class='col-1')
+              div(class='col-5 pl-0')
+                label(for='radio-square-engrave') Graver
+              div(class='col-5')
+                input(type='radio' id='radio-square-engrave' name='square-print-type' value='engrave')    
+          div(id='text-menu-container' style='display: none')
+            div(class='row')
+              h3(id='text-title') Menu du texte
+            div(class='row')  
+              div(class='col-1') 
+              div(class='col-5 pl-0')
+                label(for="select-text-font-family") Police d'écriture
+              div(class='col-5')
+                select(id="select-text-font-family" name="select-text-font-family")
+                  option(value="Arial") Arial
+                  option(value="Baskerville") Baskerville
+                  option(value="Futura") Futura
+                  option(value="Garamond") Garamond
+                  option(value="Helvetica") Helvetica
+                  option(value="Roboto") Roboto
+                  option(value="Times") Times
+                  option(value="Trajan") Trajan
+                  option(value="Akzidenz Grotesk") Akzidenz Grotesk
+                  
+            div(class='row')  
+              div(class='col-1')
+              div(class='col-5 pl-0')
+                label(for="input-text-font-size") Taille de la police
+              div(class='col-5')
+                input(id="input-text-font-size" name="input-text-font-size" type="number" min=5 max=150 value=50)  
+            div(class='row')
+              div(class='col-1')
+              div(class='col-5 pl-0')
+                label(for="input-text-content") Contenu du texte
+              div(class='col-5') 
+                input(id="input-text-content" name="input-text-content" value="A" maxlength="10")
+            div(class='row')
+              div(class='col-1')
+              div(class='col-5 pl-0')
+                label(for='radio-text-cutting') Découper
+              div(class='col-5')
+                input(type='radio' id='radio-text-cutting' name='text-print-type' value='cutting' checked)
+            div(class='row')
+              div(class='col-1')
+              div(class='col-5 pl-0')
+                label(for='radio-text-engrave') Graver
+              div(class='col-5')
+                input(type='radio' id='radio-text-engrave' name='text-print-type' value='engrave')  
           div(class='row')
             div(class='col-1')
-            div(class='col-5 pl-0')
-              label(for="input-polyline-content") Contenu de la polyligne
-            div(class='col-5 pl-0')
-              input(type='text' class='input-group-text' name='input-polyline-content' id='input-polyline-content')      
-        div(id='path-menu' style='display: none;')
-          div(class='row')
-            h3(id='path-title') Menu du tracé
-          div(class='row')
+            div(class='col-10 p-0')
+              button(class='btn btn-primary' id='btn-add-element'  style='display: none;') Ajouter un élément
+          div(class='row mt-1')
             div(class='col-1')
-            div(class='col-5 pl-0')
-              label(for='radio-path-cutting') Découper
-            div(class='col-5')
-              input(type='radio' id='radio-path-cutting' name='path-print-type' value='cutting' checked)
-          div(class='row')
+            div(class='col-10 p-0') 
+              button(class='btn btn-primary' id='btn-fill-canvas' style='display: none;') Remplir la zone de cet élément
+          div(class='row mt-1')
             div(class='col-1')
-            div(class='col-5 pl-0')
-              label(for='radio-path-engrave') Graver
-            div(class='col-5')
-              input(type='radio' id='radio-path-engrave' name='path-print-type' value='engrave') 
-          div(class='row')
+            div(class='col-10 p-0')
+              button(class='btn btn-danger' id='btn-delete-element' style='display: none;') Supprimer l'élément sélectionné
+          div(class='row mt-1')
             div(class='col-1')
-            div(class='col-5 pl-0')
-              label(for="input-path-content") Contenu du tracé
-            div(class='col-5 pl-0')
-              input(type='text' class='input-group-text' name='input-path-content' id='input-path-content')  
-        div(id='square-menu' style='display: none')
-          div(class='row')
-            h3(id='square-title') Menu du carré
-          div(class='row')  
-            div(class='col-1')
-            div(class='col-5 pl-0')
-              label(for="input-square-side") Taille du côté
-            div(class='col-5')
-              input(type="number" class='input-group-text' min=5 max=200 value='50' name='input-square-side' id='input-square-side')
-          div(class='row')
-            div(class='col-1')
-            div(class='col-5 pl-0')
-              label(for='input-square-color') Couleur du carré
-            div(class='col-5')
-              input(class='jscolor' id="input-square-color" value="ab2567")
-          div(class='row')
-            div(class='col-1')
-            div(class='col-5 pl-0')
-              label(for='radio-square-cutting') Découper
-            div(class='col-5')
-              input(type='radio' id='radio-square-cutting' name='square-print-type' value='cutting' checked)
-          div(class='row')
-            div(class='col-1')
-            div(class='col-5 pl-0')
-              label(for='radio-square-engrave') Graver
-            div(class='col-5')
-              input(type='radio' id='radio-square-engrave' name='square-print-type' value='engrave')    
-        div(id='text-menu' style='display: none')
-          div(class='row')
-            h3(id='text-title') Menu du texte
-          div(class='row')  
-            div(class='col-1') 
-            div(class='col-5 pl-0')
-              label(for="select-text-font-family") Police d'écriture
-            div(class='col-5')
-              select(id="select-text-font-family" name="select-text-font-family")
-                option(value="Helvetica") Helvetica
-                option(value="Arial") Arial
-          div(class='row')  
-            div(class='col-1')
-            div(class='col-5 pl-0')
-              label(for="input-text-font-size") Taille de la police
-            div(class='col-5')
-              input(id="input-text-font-size" name="input-text-font-size" type="number" min=5 max=150 value=50)  
-          div(class='row')
-            div(class='col-1')
-            div(class='col-5 pl-0')
-              label(for="input-text-content") Contenu du texte
-            div(class='col-5') 
-              input(id="input-text-content" name="input-text-content" value="A" maxlength="10")
-          div(class='row')
-            div(class='col-1')
-            div(class='col-5 pl-0')
-              label(for='radio-text-cutting') Découper
-            div(class='col-5')
-              input(type='radio' id='radio-text-cutting' name='text-print-type' value='cutting' checked)
-          div(class='row')
-            div(class='col-1')
-            div(class='col-5 pl-0')
-              label(for='radio-text-engrave') Graver
-            div(class='col-5')
-              input(type='radio' id='radio-text-engrave' name='text-print-type' value='engrave')  
-        div(class='row')
-          div(class='col-1')
-          div(class='col-10 p-0')
-            button(class='btn btn-primary' id='btn-add-element'  style='display: none;') Ajouter un élément
-        div(class='row mt-1')
-          div(class='col-1')
-          div(class='col-10 p-0') 
-            button(class='btn btn-primary' id='btn-fill-canvas' style='display: none;') Remplir la zone de cet élément
-        div(class='row mt-1')
-          div(class='col-1')
-          div(class='col-10 p-0')
-            button(class='btn btn-danger' id='btn-delete-element' style='display: none;') Supprimer l'élément sélectionné
-        div(class='row mt-1')
-          div(class='col-1')
-          div(class='col-10 p-0')
-            button(class='btn btn-danger' id='btn-delete-all-elements' style='display: none;') Supprimer tous les éléments
+            div(class='col-10 p-0')
+              button(class='btn btn-danger' id='btn-delete-all-elements' style='display: none;') Supprimer tous les éléments
 
-        div(class='row' class='mt-2')
-          h2 Personnalisation du canvas
-        div(class='row')
-          div(class='col-6')
-            label(for='input-canvas-width') Longueur  
-          div(class='col-6')  
-            input(id='input-canvas-width' name='input-canvas-width' value='500' type='number' min='100' max='1000')
-        div(class='row')  
-          div(class='col-6')  
-            label(for='input-canvas-height') Hauteur
-          div(class='col-6')  
-            input(id='input-canvas-height' name='input-canvas-height' value='500' type='number' min='100' max='800')
-        div(class='row')    
-          h2 Grille du canvas
-        div(class='row')
-          div(class='col-6')
-            label(for='input-grid-cell-size' style='display: none;' id='label-grid-cell-size') Taille des cellules
-          div(class='col-6')
-            input(id='input-grid-cell-size' name="input-grid-cell-size" style='display: none;' value='50' type='number' min='10' max='1000')
-        div(class='row')
-          div(class='col-12')
-            button(class='btn btn-primary' id='btn-add-grid') Afficher la grille
-        div(class='row')
-          div(class='col-12')
-            button(class='btn btn-primary' id='btn-remove-grid' style='display: none;') Cacher la grille
+        div(class='row' class='mt-2' style='position: relative;')
+          h2 Zone de travail
+          img(class='arrow' id='img-menu-canvas-arrow' menu-show='false' menu='menu-canvas' src='/images/right-arrow.png')
+        div(id='canvas-menu-container' style='display: none;')
+          div(class='row')
+            div(class='col-6')
+              label(for='input-canvas-width') Longueur  
+            div(class='col-6')  
+              input(id='input-canvas-width' name='input-canvas-width' value='500' type='number' min='100' max='1000')
+          div(class='row')  
+            div(class='col-6')  
+              label(for='input-canvas-height') Hauteur
+            div(class='col-6')  
+              input(id='input-canvas-height' name='input-canvas-height' value='500' type='number' min='100' max='800')
+        div(class='row' style='position: relative;')    
+          h2 Grille
+          img(class='arrow' id='img-menu-grid-arrow' menu-show='false' menu='menu-grid' src='/images/right-arrow.png')
+        div(id='grid-menu-container' style='display: none;')
+          div(class='row')
+            div(class='col-6')
+              label(for='input-grid-cell-size' style='display: none;' id='label-grid-cell-size') Taille des cellules
+            div(class='col-6')
+              input(id='input-grid-cell-size' name="input-grid-cell-size" style='display: none;' value='50' type='number' min='10' max='1000')
+          div(class='row')
+            div(class='col-12')
+              button(class='btn btn-primary' id='btn-add-grid') Afficher la grille
+          div(class='row')
+            div(class='col-12')
+              button(class='btn btn-primary' id='btn-remove-grid' style='display: none;') Cacher la grille
         
-        div(class='row mt-2')
-          h2 Import / Export de fichier
-        div(class='row')
-          div(class='col-12')
-            input(type='file' id='input-import-svg-file')
-        div(class='row mt-2')
-          div(class='col-12')
-            button(class='btn btn-primary' id='btn-import' style='display:none;') Importer    
-        div(class='row mt-2')
-          div(class='col-12')
-            button(class='btn btn-primary' id='btn-export') Exporter
-        div(class='row mt-2')
-          div(class='col-12')
-            button(class='btn btn-primary' id='btn-print') Imprimer 
+        div(class='row mt-2' style='position: relative;')
+          h2 Fichier
+          img(class='arrow' id='img-menu-file-arrow' menu-show='false' menu='menu-file' src='/images/right-arrow.png')
+        div(id='file-menu-container' style='display: none;')
+          div(class='row')
+            div(class='col-12')
+              input(type='file' id='input-import-svg-file')
+          div(class='row mt-2')
+            div(class='col-12')
+              button(class='btn btn-primary' id='btn-import' style='display:none;') Importer le fichier  
+          div(class='row mt-2')
+            div(class='col-12')
+              button(class='btn btn-primary' id='btn-export') Exporter la zone de travail
+          div(class='row mt-2')
+            div(class='col-12')
+              button(class='btn btn-primary' id='btn-print') Imprimer la zone de travail

@@ -25,9 +25,25 @@ block content
                 option(value="text") Texte
                 option(value="path") Tracé
                 option(value="polyline") Polyligne
+                option(value="select-all" id='option-select-all' style='display: none;') Sélectionner tout
           div(class='row mt-2')
             div(class='col-12')
-              button(class='btn btn-primary' id='btn-select-all-elements') Sélectionner tous les éléments 
+              button(class='btn btn-primary' id='btn-select-all-elements' style='display: none;') Sélectionner tous les éléments 
+          div(id='select-all-menu-container' style='display: none;')
+            div(class='row mt-3')
+              h3(id='select-all-title') Modifier tous les éléments
+            div(class='row')
+              div(class='col-1')
+              div(class='col-5 pl-0')
+                label(for='radio-select-all-cutting') Découper
+              div(class='col-5')
+                input(type='radio' id='radio-select-all-cutting' name='select-all-print-type' value='cutting')
+            div(class='row')
+              div(class='col-1')
+              div(class='col-5 pl-0')
+                label(for='radio-select-all-engrave') Graver
+              div(class='col-5')
+                input(type='radio' id='radio-select-all-engrave' name='select-all-print-type' value='engrave') 
           div(id='polyline-menu-container' style='display: none;')
             div(class='row mt-3')
               h3(id='polyline-title') Menu de la polyligne

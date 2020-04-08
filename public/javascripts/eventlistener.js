@@ -7,6 +7,7 @@ let btnDeleteAllElements = document.getElementById('btn-delete-all-elements')
 let btnSelectAllElements = document.getElementById('btn-select-all-elements');
 let selectSVGElements = document.getElementById('select-svg-elements'); 
 let imgMenuSvgArrow = document.getElementById('img-menu-svg-arrow');
+let optionSelectAll = document.getElementById('option-select-all');
 // ------ SQUARE MENU ------
 let squareTitle = document.getElementById('square-title');
 let inputSquareSide = document.getElementById('input-square-side');
@@ -30,6 +31,9 @@ let polylineTitle = document.getElementById('polyline-title');
 let inputPolylineRadioCutting = document.getElementById('radio-polyline-cutting');
 let inputPolylineRadioEngrave = document.getElementById('radio-polyline-engrave');
 let inputPolylineContent = document.getElementById('input-polyline-content');
+// ----- SELECT ALL ------
+let inputSelectAllRadioCutting = document.getElementById('radio-select-all-cutting');
+let inputSelectAllRadioEngrave = document.getElementById('radio-select-all-engrave');
 // **** CANVAS MENU ****
 let inputGridCellSize = document.getElementById('input-grid-cell-size')
 let inputCanvasWidth = document.getElementById('input-canvas-width');
@@ -49,6 +53,7 @@ let svgMenuContainer = document.getElementById('svg-menu-container');
 let canvasMenuContainer = document.getElementById('canvas-menu-container');
 let gridMenuContainer = document.getElementById('grid-menu-container');
 let fileMenuContainer = document.getElementById('file-menu-container');
+let selectAllMenuContainer = document.getElementById('select-all-menu-container');
 
 let polylineMenuContainer = document.getElementById('polyline-menu-container');
 let canvasBackground = null;
@@ -191,6 +196,16 @@ function InputSquareRadioPrintTypeChangeCallback(event)
     }
 }
 
+function InputSelectAllChangeCallback(event)
+{
+    let printType = (inputSelectAllRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
+        
+    for(let i = 0; i < listOfShape.length; i++)
+    {
+        listOfShape[i].setPrintType(printType);
+    }
+}
+
 function InputTextRadioPrintTypeChangeCallback(event)
 {
     if(selectedShape !== null && selectedShape.type === 'text')
@@ -241,6 +256,9 @@ function BtnAddElementClickCallback()
         default:
             break;
     }
+
+    optionSelectAll.style.display = 'block';
+    btnSelectAllElements.style.display = 'block';
 }
 
 function BtnRemoveGridClickCallback(event)
@@ -291,6 +309,8 @@ function BtnDeleteElementClickCallback(event)
     console.log(listOfShape);
     btnDeleteElement.style.display = 'none';
     (listOfShape && listOfShape.length ? null : btnDeleteAllElements.style.display = 'none');
+    (listOfShape && listOfShape.length ? null : btnSelectAllElements.style.display = 'none');
+    (listOfShape && listOfShape.length ? null : optionSelectAll.style.display = 'none');
 }
 
 function BtnDeleteAllElementsClickCallback(event)
@@ -302,6 +322,8 @@ function BtnDeleteAllElementsClickCallback(event)
     }
     listOfShape = [];
     btnDeleteAllElements.style.display = 'none';
+    optionSelectAll.style.display = 'none';
+    btnSelectAllElements.style.display = 'none';
 }
 
 function BtnExportCanvasClickCallback(event)
@@ -353,6 +375,13 @@ function BtnShowMenuClickCallback(event)
     (menuShow  ? menuContainer.style.display = 'none' : menuContainer.style.display = 'block');
     (menuShow ? btnShowMenu.innerText = 'Afficher le menu' : btnShowMenu.innerText = 'Cacher le menu');
     menuShow = !menuShow;
+}
+
+function BtnSelectAllClickCallback(event)
+{
+    hideMenus();
+    showMenu('select-all');
+    selectSVGElements.value = 'select-all';
 }
 
 function CanvasBackgroundClickCallback(event)
@@ -411,6 +440,7 @@ function bindEventListener()
     btnExportCanvas.addEventListener('click', BtnExportCanvasClickCallback);
     btnPrint.addEventListener('click', BtnPrintCanvasClickCallback);
     btnImport.addEventListener('click', BtnImportClickCallback);
+    btnSelectAllElements.addEventListener('click', BtnSelectAllClickCallback);
     inputSquareSide.addEventListener('change', InputSquareSideChangeCallback);
     inputSquareColor.addEventListener('change', InputSquareColorChangeCallback);
     inputSquareRadioEngrave.addEventListener('change', InputSquareRadioPrintTypeChangeCallback);
@@ -421,6 +451,8 @@ function bindEventListener()
     inputPathRadioCutting.addEventListener('change', InputPathRadioPrintTypeChangeCallback);
     inputPolylineRadioEngrave.addEventListener('change', InputPolylineRadioPrintTypeChangeCallback);
     inputPolylineRadioCutting.addEventListener('change', InputPolylineRadioPrintTypeChangeCallback);
+    inputSelectAllRadioCutting.addEventListener('change', InputSelectAllChangeCallback);
+    inputSelectAllRadioEngrave.addEventListener('change', InputSelectAllChangeCallback);
     inputTextFontSize.addEventListener('change', InputTextFontSizeChangeCallback);
     inputTextContent.addEventListener('change', InputTextContentChangeCallback);
     inputGridCellSize.addEventListener('change', InputGridCellSizeChangeCallback);
@@ -571,6 +603,11 @@ function showMenu(menuName)
         case "polyline" :
             polylineMenuContainer.style.display = 'block';  
             break;      
+        case "select-all":
+            selectAllMenuContainer.style.display = 'block';
+            btnAddElement.style.display = 'none';
+            btnFillCanvas.style.display = 'none';
+            break;
         default: 
             // Remove the add buttons by default.
             btnAddElement.style.display = 'none';
@@ -587,6 +624,7 @@ function hideMenus()
     textMenuContainer.style.display = 'none';
     pathMenuContainer.style.display = 'none';
     polylineMenuContainer.style.display = 'none';
+    selectAllMenuContainer.style.display = 'none';
     textTitle.innerText = 'Menu du texte';
     squareTitle.innerText = 'Menu du carré';
     polylineTitle.innerText = 'Menu de la polyligne';

@@ -65,6 +65,7 @@ let gridActive = false;
 let selectedShape = null;
 let listOfShape = [];
 let listOfGridLine = [];
+let oldListOfShape = null;
 let importFileContent = null;
 let menuShow = false;
 
@@ -317,6 +318,8 @@ function BtnImportClickCallback(event)
 {
     if(importFileContent !== null)
     {
+        oldListOfShape = listOfShape;
+
         var svgHTML = new DOMParser().parseFromString(importFileContent, "text/xml");
         console.log(svgHTML);
         // Test if first child is a comment.
@@ -332,13 +335,14 @@ function BtnImportClickCallback(event)
         console.log(svgHTML.firstChild instanceof SVGElement);
         console.log(svgHTML.childNodes[1] instanceof SVGElement);
         console.log(svgHTML.childNodes[2] instanceof SVGElement);
-        svgContent.id = 'main-canvas';
+        //svgContent.id = 'main-canvas';
         //console.log(svgContent);
-        mainCanvas.remove();
+        //mainCanvas.remove();
         importFileContent = svgContent;
         //canvasContainer.appendChild(svgContent);
         //mainCanvas.svg(svgContent);
         //mainCanvas = document.getElementById('main-canvas');
+        
         initImportedFile();
     }
 
@@ -437,6 +441,7 @@ function bindEventListener()
 
 function initImportedFile()
 {
+    /*
     mainCanvas = SVG().addTo('#canvas-container').size(inputCanvasWidth.value, inputCanvasHeight.value);
     mainCanvas.attr({
         'id': 'main-canvas',
@@ -448,6 +453,7 @@ function initImportedFile()
         width: inputCanvasWidth.value,
         height: inputCanvasHeight.value
     });
+    */
 
     bindEventListener();
     let canvasWidth = 0;
@@ -502,7 +508,9 @@ function initImportedFile()
             }
         }
     }
-    console.log(listOfShape);
+    // Import active shapes before import.
+    console.log(oldListOfShape);
+    
 }
 
 function showMenuContainer(menuName)

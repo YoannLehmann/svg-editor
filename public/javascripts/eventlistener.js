@@ -1,4 +1,5 @@
 // **** SVG MENU ****
+let btnShowMenu = document.getElementById('btn-show-menu');
 let btnFillCanvas = document.getElementById('btn-fill-canvas');
 let btnDeleteElement = document.getElementById('btn-delete-element');
 let btnAddElement = document.getElementById('btn-add-element');
@@ -39,6 +40,7 @@ let btnRemoveGrid = document.getElementById('btn-remove-grid');
 let imgMenuCanvasArrow = document.getElementById('img-menu-canvas-arrow');
 let imgMenuGridArrow = document.getElementById('img-menu-grid-arrow');
 // **** CONTAINERS ****
+let menuContainer = document.getElementById('menu-container');
 let canvasContainer = document.getElementById('canvas-container');
 let squareMenuContainer = document.getElementById('square-menu-container');
 let textMenuContainer = document.getElementById('text-menu-container');
@@ -64,6 +66,7 @@ let selectedShape = null;
 let listOfShape = [];
 let listOfGridLine = [];
 let importFileContent = null;
+let menuShow = false;
 
 // Initialisation.
 window.onload = function(event)
@@ -326,6 +329,13 @@ function BtnImportClickCallback(event)
 
 }
 
+function BtnShowMenuClickCallback(event)
+{
+    (menuShow  ? menuContainer.style.display = 'none' : menuContainer.style.display = 'block');
+    (menuShow ? btnShowMenu.innerText = 'Afficher le menu' : btnShowMenu.innerText = 'Cacher le menu');
+    menuShow = !menuShow;
+}
+
 function CanvasBackgroundClickCallback(event)
 {
     UnselectAllElement();
@@ -407,6 +417,7 @@ function bindEventListener()
     imgMenuCanvasArrow.addEventListener('click', ImgMenuArrowCallback);
     imgMenuGridArrow.addEventListener('click', ImgMenuArrowCallback);
     imgMenuFileArrow.addEventListener('click', ImgMenuArrowCallback);
+    btnShowMenu.addEventListener('click', BtnShowMenuClickCallback);
 }
 
 function initImportedFile()

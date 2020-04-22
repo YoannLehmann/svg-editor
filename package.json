@@ -13,7 +13,21 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
+    "opn": "^6.0.0",
     "pug": "^2.0.4",
     "svgexport": "^0.4.0"
-  }
+  },
+  "description": "",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YoannLehmann/svg-editor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YoannLehmann/svg-editor/issues"
+  },
+  "homepage": "https://github.com/YoannLehmann/svg-editor#readme",
+  "devDependencies": {}
 }

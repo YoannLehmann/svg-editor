@@ -54,7 +54,7 @@ h3 {
 }
 
 select {
-  height: 25px;
+  height: 35px;
   width: 100%;
   background-color: white;
   border-radius: 0px;
@@ -76,8 +76,8 @@ button {
 #menu-container {
   background-color: whitesmoke;/*#E1E2E1;*/
   position: absolute;
-  right: 75px;
-  top: 100px;
+  right: 0px;
+  top: 0px;
 }
 
 #canvas-container {

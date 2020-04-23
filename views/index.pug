@@ -12,18 +12,18 @@ block content
       div(class='col-6 pl-0 pr-0')
         div(class='row')
           img(src='/images/logo-HEP-BEJUNE.png' id='img-logo-hep')
-    div(class='row')
+    div(class='row' style='position: relative;')
       div(class='col-12 pl-0 pr-0' )
         div(id="canvas-container" )
-      div(class='col-4 pl-0 pr-0' id='menu-container' style='display: none;')
+      div(class='col-5 pl-0 pr-0' id='menu-container' style='display: none;')
         div(class='row')
           h2 Menu SVG
           img(class='arrow' id='img-menu-svg-arrow' menu-show='false' menu='menu-svg' src='/images/right-arrow.png')
         div(id='svg-menu-container' style='display: none;')
           div(class='row')
-            div(class='col-6')
+            div(class='col-5')
               label Sélectionner l'élément à ajouter 
-            div(class='col-6')
+            div(class='col-7')
               select(id="select-svg-elements" name="select-svg-elements")
                 option(value="0") Choisir un élément
                 option(value="square") Carré

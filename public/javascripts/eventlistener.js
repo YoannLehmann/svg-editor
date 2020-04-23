@@ -11,9 +11,13 @@ let optionSelectAll = document.getElementById('option-select-all');
 // ------ SQUARE MENU ------
 let squareTitle = document.getElementById('square-title');
 let inputSquareSide = document.getElementById('input-square-side');
-let inputSquareColor = document.getElementById('input-square-color');
 let inputSquareRadioCutting = document.getElementById('radio-square-cutting');
 let inputSquareRadioEngrave = document.getElementById('radio-square-engrave');
+// ------ CIRCLE MENU ------
+let circleTitle = document.getElementById('circle-title');
+let inputCircleDiameter = document.getElementById('input-circle-diameter');
+let inputCircleRadioCutting = document.getElementById('radio-circle-cutting');
+let inputCircleRadioEngrave = document.getElementById('radio-circle-engrave');
 // ------ TEXT MENU --------
 let textTitle = document.getElementById('text-title');
 let selectTextFontFamily = document.getElementById('select-text-font-family');
@@ -54,6 +58,7 @@ let canvasMenuContainer = document.getElementById('canvas-menu-container');
 let gridMenuContainer = document.getElementById('grid-menu-container');
 let fileMenuContainer = document.getElementById('file-menu-container');
 let selectAllMenuContainer = document.getElementById('select-all-menu-container');
+let circleMenuContainer = document.getElementById('circle-menu-container');
 
 let polylineMenuContainer = document.getElementById('polyline-menu-container');
 let canvasBackground = null;
@@ -163,14 +168,6 @@ function InputSquareSideChangeCallback(event)
     }
 }
 
-function InputSquareColorChangeCallback(event)
-{
-    if(selectedShape !== null && selectedShape.type === 'square')
-    {
-        selectedShape.changeColor(inputSquareColor.value);
-    }
-}
-
 function InputTextFontSizeChangeCallback(event)
 {
     if(selectedShape !== null && selectedShape.type === 'text')
@@ -233,13 +230,35 @@ function InputPolylineRadioPrintTypeChangeCallback(event)
     }
 }
 
+function InputCircleDiameterChangeCallback(event)
+{
+    if(selectedShape !== null && selectedShape.type === 'circle')
+    {
+        selectedShape.setWidth(inputCircleDiameter.value);
+        selectedShape.setHeight(inputCircleDiameter.value);
+    }
+}
+
+function InputCircleRadioPrintTypeChangeCallback(event)
+{
+    if(selectedShape !== null && selectedShape.type === 'circle')
+    {
+        let printType = (inputCircleRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
+        selectedShape.setPrintType(printType);
+    }
+}
+
 function BtnAddElementClickCallback()
 {
     switch(selectSVGElements.value)
     {
         case 'square' : 
             let squarePrintType = (inputSquareRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
-            addNewSquare(inputSquareSide.value, inputSquareColor.value, 0, 0, squarePrintType);
+            addNewSquare(inputSquareSide.value, 'black', 0, 0, squarePrintType);
+            break;
+        case 'circle' :
+            let circlePrintType = (inputCircleRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
+            addNewCircle(inputCircleDiameter.value, 'black', 0, 0, circlePrintType);
             break;
         case 'text' : 
             let textPrintType = (inputTextRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
@@ -273,6 +292,7 @@ function BtnRefreshGridClickCallback(event)
 
 function BtnFillCanvasClickCallback(event)
 {
+    btnSelectAllElements.style.display = 'block';
     switch(selectSVGElements.value)
     {
         case 'square' : 
@@ -281,6 +301,9 @@ function BtnFillCanvasClickCallback(event)
         case 'text' : 
             fillCanvasWithText();
             break;
+        case 'circle' :
+            fillCanvasWithCircles();
+            break;    
         default: 
             break;
     }
@@ -288,8 +311,6 @@ function BtnFillCanvasClickCallback(event)
 
 function BtnDeleteElementClickCallback(event)
 {
-    console.log("Avant suppression : ");
-    console.log(listOfShape);
     if(selectedShape !== null)
     {
         let shapeIndex = 0;
@@ -305,12 +326,10 @@ function BtnDeleteElementClickCallback(event)
         listOfShape.splice(shapeIndex);
     }
 
-    console.log("Après suppression");
-    console.log(listOfShape);
     btnDeleteElement.style.display = 'none';
-    (listOfShape && listOfShape.length ? null : btnDeleteAllElements.style.display = 'none');
-    (listOfShape && listOfShape.length ? null : btnSelectAllElements.style.display = 'none');
-    (listOfShape && listOfShape.length ? null : optionSelectAll.style.display = 'none');
+    (listOfShape && listOfShape.length > 0 ? btnDeleteAllElements.style.display = 'block' : btnDeleteAllElements.style.display = 'none');
+    (listOfShape && listOfShape.length > 0 ? btnSelectAllElements.style.display = 'block' : btnSelectAllElements.style.display = 'none');
+    (listOfShape && listOfShape.length > 0 ? null : optionSelectAll.style.display = 'none');
 }
 
 function BtnDeleteAllElementsClickCallback(event)
@@ -321,9 +340,11 @@ function BtnDeleteAllElementsClickCallback(event)
         listOfShape[i].SVGElement.remove();
     }
     listOfShape = [];
+    btnDeleteElement.style.display = 'none';
     btnDeleteAllElements.style.display = 'none';
     optionSelectAll.style.display = 'none';
     btnSelectAllElements.style.display = 'none';
+    showMenu('0');
 }
 
 function BtnExportCanvasClickCallback(event)
@@ -343,8 +364,7 @@ function BtnImportClickCallback(event)
         oldListOfShape = listOfShape;
 
         var svgHTML = new DOMParser().parseFromString(importFileContent, "text/xml");
-        console.log(svgHTML);
-        // Test if first child is a comment.
+
         let contentIndex = 0;
         let svgContent = svgHTML.childNodes[contentIndex];
         while(!(svgContent instanceof SVGElement))
@@ -353,17 +373,7 @@ function BtnImportClickCallback(event)
             svgContent = svgHTML.childNodes[contentIndex];
         }
         
-        console.log("SVG CONTENT");
-        console.log(svgHTML.firstChild instanceof SVGElement);
-        console.log(svgHTML.childNodes[1] instanceof SVGElement);
-        console.log(svgHTML.childNodes[2] instanceof SVGElement);
-        //svgContent.id = 'main-canvas';
-        //console.log(svgContent);
-        //mainCanvas.remove();
         importFileContent = svgContent;
-        //canvasContainer.appendChild(svgContent);
-        //mainCanvas.svg(svgContent);
-        //mainCanvas = document.getElementById('main-canvas');
         
         initImportedFile();
     }
@@ -379,9 +389,11 @@ function BtnShowMenuClickCallback(event)
 
 function BtnSelectAllClickCallback(event)
 {
+    SelectAllElements();
     hideMenus();
     showMenu('select-all');
     selectSVGElements.value = 'select-all';
+    btnDeleteElement.style.display = 'none';
 }
 
 function CanvasBackgroundClickCallback(event)
@@ -410,6 +422,11 @@ function CanvasBackgroundMouseupCallback(event)
 
 function ShapeClickCallback(event, shape)
 {
+    for(let i = 0; i < listOfShape.length; i++)
+    {
+        if(listOfShape[i] !== shape)
+            listOfShape[i].SVGElement.css('opacity', '1');
+    } 
     hideMenus();
     selectedShape = shape;
     showMenu(shape.type);
@@ -442,9 +459,11 @@ function bindEventListener()
     btnImport.addEventListener('click', BtnImportClickCallback);
     btnSelectAllElements.addEventListener('click', BtnSelectAllClickCallback);
     inputSquareSide.addEventListener('change', InputSquareSideChangeCallback);
-    inputSquareColor.addEventListener('change', InputSquareColorChangeCallback);
     inputSquareRadioEngrave.addEventListener('change', InputSquareRadioPrintTypeChangeCallback);
     inputSquareRadioCutting.addEventListener('change', InputSquareRadioPrintTypeChangeCallback);
+    inputCircleDiameter.addEventListener('change', InputCircleDiameterChangeCallback);
+    inputCircleRadioCutting.addEventListener('change', InputCircleRadioPrintTypeChangeCallback);
+    inputCircleRadioEngrave.addEventListener('change', InputCircleRadioPrintTypeChangeCallback);
     inputTextRadioEngrave.addEventListener('change', InputTextRadioPrintTypeChangeCallback);
     inputTextRadioCutting.addEventListener('change', InputTextRadioPrintTypeChangeCallback);
     inputPathRadioEngrave.addEventListener('change', InputPathRadioPrintTypeChangeCallback);
@@ -473,20 +492,6 @@ function bindEventListener()
 
 function initImportedFile()
 {
-    /*
-    mainCanvas = SVG().addTo('#canvas-container').size(inputCanvasWidth.value, inputCanvasHeight.value);
-    mainCanvas.attr({
-        'id': 'main-canvas',
-        'max-width' : '630px'
-    });
-    canvasBackground = mainCanvas.rect(inputCanvasWidth.value,inputCanvasHeight.value).attr({
-        fill:'#ddd',
-        id: 'canvas-background',
-        width: inputCanvasWidth.value,
-        height: inputCanvasHeight.value
-    });
-    */
-
     bindEventListener();
     let canvasWidth = 0;
     let canvasHeight = 0;
@@ -522,6 +527,9 @@ function initImportedFile()
             {
                 case 'text' : 
                     addNewText(node.getAttribute('font-size'), node.getAttribute('font-family'), node.textContent, parseInt(node.getAttribute('x')), parseInt(node.getAttribute('y')), node.getAttribute('print-type'));
+                    break;
+                case 'circle' :
+                    addNewCircle(node.getAttribute('width'), node.getAttribute('color'), parseInt(node.getAttribute('x')), parseInt(node.getAttribute('y')), node.getAttribute('print-type'));
                     break;
                 case 'square' :
                     addNewSquare(node.getAttribute('width'), node.getAttribute('color'), parseInt(node.getAttribute('x')), parseInt(node.getAttribute('y')), node.getAttribute('print-type'));
@@ -561,6 +569,9 @@ function showMenuContainer(menuName)
         case 'menu-file' : 
             fileMenuContainer.style.display = 'block';
             break;
+        case 'menu-circle' :
+            circleMenuContainer.style.display = 'block';
+            break;
     }
 }
 
@@ -580,6 +591,9 @@ function hideMenuContainer(menuName)
         case 'menu-file' : 
             fileMenuContainer.style.display = 'none';
             break;
+        case 'menu-circle' :
+            circleMenuContainer.style.display = 'none';
+            break;    
     }
 }
 
@@ -587,15 +601,21 @@ function showMenu(menuName)
 {
     // Display the add buttons.
     btnAddElement.style.display = 'block';
-    btnFillCanvas.style.display = 'block';
+    btnFillCanvas.style.display = 'none';
 
     switch(menuName)
     {
         case "square":
             squareMenuContainer.style.display = 'block';
+            btnFillCanvas.style.display = 'block';
             break;
+        case "circle" :
+            circleMenuContainer.style.display = 'block';
+            btnFillCanvas.style.display = 'block';
+            break;    
         case "text" : 
             textMenuContainer.style.display = 'block';
+            btnFillCanvas.style.display = 'block';
             break;
         case "path" :
             pathMenuContainer.style.display = 'block';
@@ -606,12 +626,16 @@ function showMenu(menuName)
         case "select-all":
             selectAllMenuContainer.style.display = 'block';
             btnAddElement.style.display = 'none';
-            btnFillCanvas.style.display = 'none';
             break;
         default: 
             // Remove the add buttons by default.
             btnAddElement.style.display = 'none';
             btnFillCanvas.style.display = 'none';
+            squareMenuContainer.style.display = 'none';
+            textMenuContainer.style.display = 'none';
+            polylineMenuContainer.style.display = 'none';
+            selectAllMenuContainer.style.display = 'none';
+            selectSVGElements.value = '0';
             break;
     }
 
@@ -625,10 +649,12 @@ function hideMenus()
     pathMenuContainer.style.display = 'none';
     polylineMenuContainer.style.display = 'none';
     selectAllMenuContainer.style.display = 'none';
+    circleMenuContainer.style.display = 'none';
     textTitle.innerText = 'Menu du texte';
     squareTitle.innerText = 'Menu du carré';
     polylineTitle.innerText = 'Menu de la polyligne';
     pathTitle.innerText = 'Menu du tracé';
+    circleTitle.innerText = 'Menu du cercle';
 }
 
 function removeGrid()
@@ -678,11 +704,20 @@ function refreshGrid()
     }
 }
 
+function SelectAllElements()
+{
+    for(let i = 0; i < listOfShape.length; i++)
+    {
+        listOfShape[i].SVGElement.css('opacity', '0.7');
+    } 
+}
+
 function UnselectAllElement()
 {
     for(let i = 0; i < listOfShape.length; i++)
     {
         listOfShape[i].Unselect();
+        listOfShape[i].SVGElement.css('opacity', '1');
         listOfShape[i].OnMouseUpCallback();
     }
 
@@ -692,6 +727,7 @@ function UnselectAllElement()
     squareTitle.innerText = 'Menu du carré';
     polylineTitle.innerText = 'Menu de la polyligne';
     pathTitle.innerText = 'Menu du tracé';
+    circleTitle.innerText = 'Menu du cercle';
 }
 
 function bindShapeListener(shape)
@@ -720,6 +756,14 @@ function addNewSquare(squareSideLength, squareColor, squarePosX = 20, squarePosY
     let square = new Square(mainCanvas, canvasContainer.getBoundingClientRect(), inputCanvasWidth.value, inputCanvasHeight.value, squareSideLength, squarePosX, squarePosY, squareColor, printType);
     bindShapeListener(square);
     listOfShape.push(square);
+    btnDeleteAllElements.style.display = 'block';
+}
+
+function addNewCircle(circleDiameter, circleColor, circlePosX = 20, circlePosY = 20, printType = PrintType.NO_TYPE)
+{
+    let circle = new Circle(mainCanvas, canvasContainer.getBoundingClientRect(), inputCanvasWidth.value, inputCanvasHeight.value, circleDiameter, circlePosX, circlePosY, circleColor, printType);
+    bindShapeListener(circle);
+    listOfShape.push(circle);
     btnDeleteAllElements.style.display = 'block';
 }
 
@@ -755,7 +799,7 @@ function addNewPolyline(polylineContent, polylinePosX = 50, polylinePosY = 50, p
 function fillCanvasWithSquares()
 {
     let squareSideLength = parseInt(inputSquareSide.value);
-    let squareColor = inputSquareColor.value;
+    let squareColor = 'black';
     const elementSpacing = 3;
 
     let horizontalLineCount = Math.floor(inputCanvasWidth.value / (squareSideLength));
@@ -776,6 +820,34 @@ function fillCanvasWithSquares()
         {
             let squarePrintType = (inputSquareRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
             addNewSquare(squareSideLength, squareColor, i * (squareSideLength + elementSpacing), j * (squareSideLength + elementSpacing), squarePrintType);
+        }
+    }
+}
+
+function fillCanvasWithCircles()
+{
+    let circleDiameter = parseInt(inputCircleDiameter.value);
+    let circleColor = 'black';
+    const elementSpacing = 3;
+
+    let horizontalLineCount = Math.floor(inputCanvasWidth.value / (circleDiameter));
+    // Tester si la les carrés + les espaces sont plus grand que la taille totale
+    while((horizontalLineCount * elementSpacing + horizontalLineCount * circleDiameter) > inputCanvasWidth.value)
+    {
+        horizontalLineCount--;
+    }
+    
+    for(let i = 0; i < horizontalLineCount; i++)
+    {
+        let verticalLineCount = Math.floor(inputCanvasHeight.value / (circleDiameter))
+        while((verticalLineCount * elementSpacing + verticalLineCount * circleDiameter) > inputCanvasHeight.value)
+        {
+            verticalLineCount--;
+        }
+        for(let j = 0; j < verticalLineCount; j++)
+        {
+            let circlePrintType = (inputCircleRadioCutting.checked ? PrintType.CUTTING : PrintType.ENGRAVE);
+            addNewCircle(circleDiameter, circleColor, i * (circleDiameter + elementSpacing), j * (circleDiameter + elementSpacing), circlePrintType);
         }
     }
 }
@@ -816,11 +888,16 @@ function updateMenuWithShape(shape)
     {
         case 'square' : 
             squareTitle.innerText = 'Menu du carré (élément sélectionné)';
-            inputSquareColor.value = shape.color;
             inputSquareSide.value = shape.width;
             selectSVGElements.value = 'square';
             (shape.getPrintType() === 'cutting' ? inputSquareRadioCutting.checked = 'checked' : inputSquareRadioEngrave.checked = 'checked')
             break;
+        case 'circle' :
+            circleTitle.innerText = 'Menu du cercle (élément sélectionné)';
+            inputCircleDiameter.value = shape.width;
+            selectSVGElements.value = 'circle';
+            (shape.getPrintType() === 'cutting' ? inputCircleRadioCutting.checked = 'checked' : inputCircleRadioEngrave.checked = 'checked')
+            break;   
         case 'text' : 
             textTitle.innerText = 'Menu du texte (élément sélectionné)';
             inputTextContent.value = shape.textContent;

@@ -9,7 +9,7 @@ class Square extends Shape
         this.SVGElement.y(this.yPos);
 
         this.SVGElement.attr({
-            fill: 'black'
+            fill: 'black',
         });
         this.updateAttr();
         super.setPrintType(printType);

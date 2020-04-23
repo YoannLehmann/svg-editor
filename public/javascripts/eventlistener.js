@@ -529,7 +529,7 @@ function initImportedFile()
                     addNewText(node.getAttribute('font-size'), node.getAttribute('font-family'), node.textContent, parseInt(node.getAttribute('x')), parseInt(node.getAttribute('y')), node.getAttribute('print-type'));
                     break;
                 case 'circle' :
-                    addNewCircle(node.getAttribute('width'), node.getAttribute('color'), parseInt(node.getAttribute('x')), parseInt(node.getAttribute('y')), node.getAttribute('print-type'));
+                    addNewCircle(node.getAttribute('width'), node.getAttribute('color'), parseInt(node.getAttribute('cx')), parseInt(node.getAttribute('cy')), node.getAttribute('print-type'));
                     break;
                 case 'square' :
                     addNewSquare(node.getAttribute('width'), node.getAttribute('color'), parseInt(node.getAttribute('x')), parseInt(node.getAttribute('y')), node.getAttribute('print-type'));
@@ -926,11 +926,10 @@ function updateMenuWithShape(shape)
 function printCanvas()
 {
     var mywindow = window.open('', 'my div', 'height=400,width=600');
-    mywindow.document.write('<html><head><title>my div</title>');
-    /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-    mywindow.document.write('</head><body >');
-    mywindow.document.write(getSvgCanvas());
-    mywindow.document.write('</body></html>');
+    mywindow.document.head.innerHTML = '<title>Impression de la zone de travail</title>';
+    mywindow.document.body.innerHTML = '<body>' + getSvgCanvas() + '</body>';        
+    mywindow.document.close();
+    mywindow.focus();
     mywindow.print();
     mywindow.close();
 }
